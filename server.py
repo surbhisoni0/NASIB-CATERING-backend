@@ -26,6 +26,7 @@ from fastapi import (
     Depends,
     Header,
     Request,
+    BackgroundTasks,
 )
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse, StreamingResponse
@@ -37,6 +38,8 @@ from pymongo.errors import PyMongoError
 from bson import ObjectId
 
 from groq import AsyncGroq
+
+import httpx
 
 
 # ============================================================
@@ -88,6 +91,23 @@ ADMIN_TOKEN_SECRET = os.getenv(
 CORS_ORIGINS = os.getenv(
     "CORS_ORIGINS",
     "*"
+).strip()
+
+# --- Order email notifications (Resend) ---
+
+RESEND_API_KEY = os.getenv(
+    "RESEND_API_KEY",
+    ""
+).strip()
+
+NOTIFICATION_EMAIL = os.getenv(
+    "NOTIFICATION_EMAIL",
+    ""
+).strip()
+
+EMAIL_FROM = os.getenv(
+    "EMAIL_FROM",
+    ""
 ).strip()
 
 
@@ -330,6 +350,18 @@ async def log_config_on_startup():
         "CORS_ORIGINS:       %s",
         CORS_ORIGINS
     )
+    logger.info(
+        "RESEND_API_KEY:     %s",
+        "set" if RESEND_API_KEY else "MISSING (order emails disabled)"
+    )
+    logger.info(
+        "NOTIFICATION_EMAIL: %s",
+        NOTIFICATION_EMAIL or "MISSING (business email disabled)"
+    )
+    logger.info(
+        "EMAIL_FROM:         %s",
+        EMAIL_FROM or "MISSING (order emails disabled)"
+    )
     logger.info("=" * 60)
 
 
@@ -501,6 +533,413 @@ def build_whatsapp_url(order: dict) -> str:
         "https://api.whatsapp.com/send"
         f"?text={text}"
     )
+
+
+# ============================================================
+# ORDER EMAIL NOTIFICATIONS (RESEND)
+# ============================================================
+#
+# These functions send the business notification email and the
+# customer confirmation email after an order has already been
+# saved to MongoDB. They are called from create_order() via
+# FastAPI BackgroundTasks, so a slow or failing email provider
+# never delays or fails the order API response.
+#
+# Nothing here can raise out to the caller — every function
+# swallows its own exceptions and logs them instead.
+
+RESEND_API_URL = "https://api.resend.com/emails"
+
+
+def _order_display_id(order_id: str) -> str:
+
+    # Short, human-friendly reference shown in emails
+    # (last 8 characters of the Mongo ObjectId).
+    return order_id[-8:].upper() if order_id else "N/A"
+
+
+def _format_order_datetime(value) -> str:
+
+    try:
+
+        if isinstance(value, str):
+            return value
+
+        return value.strftime(
+            "%d %b %Y, %H:%M UTC"
+        )
+
+    except Exception:
+
+        return "N/A"
+
+
+def _format_items(items) -> str:
+
+    if not items:
+        return ""
+
+    lines = []
+
+    for item in items:
+
+        if isinstance(item, dict):
+
+            name = item.get("name") or item.get("title") or "Item"
+            qty = item.get("qty") or item.get("quantity")
+
+            if qty:
+                lines.append(f"{qty} x {name}")
+            else:
+                lines.append(str(name))
+
+        else:
+
+            lines.append(str(item))
+
+    return "\n".join(lines)
+
+
+def _escape_html(value: Optional[str]) -> str:
+
+    if not value:
+        return ""
+
+    return (
+        str(value)
+        .replace("&", "&amp;")
+        .replace("<", "&lt;")
+        .replace(">", "&gt;")
+    )
+
+
+def _order_email_rows(order: dict, order_id: str) -> list:
+    """Builds the (label, value) rows shared by both emails, using
+    only fields that actually exist on the order document."""
+
+    rows = [
+        ("Order ID", _order_display_id(order_id)),
+        ("Name", order.get("name") or "N/A"),
+        ("Phone", order.get("phone") or "N/A"),
+    ]
+
+    if order.get("email"):
+        rows.append(("Email", order["email"]))
+
+    if order.get("address"):
+        rows.append(("Address", order["address"]))
+
+    if order.get("order_details"):
+        rows.append(("Order details", order["order_details"]))
+
+    items_text = _format_items(order.get("items"))
+
+    if items_text:
+        rows.append(("Items", items_text))
+
+    if order.get("message"):
+        rows.append(("Note", order["message"]))
+
+    rows.append(("Status", order.get("status") or "new"))
+    rows.append(
+        (
+            "Submitted",
+            _format_order_datetime(order.get("created_at")),
+        )
+    )
+
+    return rows
+
+
+def _render_email_html(
+    heading: str,
+    intro_html: str,
+    rows: list,
+    footer_html: str,
+) -> str:
+
+    rows_html = "".join(
+        f"""
+        <tr>
+          <td style="padding:10px 16px;border-bottom:1px solid #eee5d8;
+                     color:#8a6d3b;font-size:13px;font-weight:600;
+                     white-space:nowrap;vertical-align:top;">{_escape_html(label)}</td>
+          <td style="padding:10px 16px;border-bottom:1px solid #eee5d8;
+                     color:#3a2f22;font-size:14px;white-space:pre-line;">{_escape_html(value)}</td>
+        </tr>
+        """
+        for label, value in rows
+    )
+
+    return f"""
+    <!DOCTYPE html>
+    <html>
+    <body style="margin:0;padding:0;background-color:#f6f1e8;
+                 font-family:Georgia,'Times New Roman',serif;">
+      <table role="presentation" width="100%" cellpadding="0" cellspacing="0"
+             style="background-color:#f6f1e8;padding:32px 16px;">
+        <tr>
+          <td align="center">
+            <table role="presentation" width="100%" cellpadding="0" cellspacing="0"
+                   style="max-width:560px;background:#ffffff;border-radius:10px;
+                          overflow:hidden;box-shadow:0 2px 12px rgba(0,0,0,0.06);">
+              <tr>
+                <td style="background:#3a2f22;padding:28px 32px;text-align:center;">
+                  <div style="color:#e8c77b;font-size:12px;letter-spacing:3px;
+                              text-transform:uppercase;margin-bottom:6px;">{_escape_html(BUSINESS_NAME)}</div>
+                  <div style="color:#ffffff;font-size:20px;font-weight:600;">{_escape_html(heading)}</div>
+                </td>
+              </tr>
+              <tr>
+                <td style="padding:28px 32px 8px 32px;color:#3a2f22;
+                           font-size:15px;line-height:1.6;">
+                  {intro_html}
+                </td>
+              </tr>
+              <tr>
+                <td style="padding:8px 16px 24px 16px;">
+                  <table role="presentation" width="100%" cellpadding="0" cellspacing="0"
+                         style="border:1px solid #eee5d8;border-radius:8px;overflow:hidden;">
+                    {rows_html}
+                  </table>
+                </td>
+              </tr>
+              <tr>
+                <td style="padding:0 32px 28px 32px;color:#7a6a52;
+                           font-size:13px;line-height:1.6;border-top:1px solid #eee5d8;
+                           padding-top:20px;">
+                  {footer_html}
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+      </table>
+    </body>
+    </html>
+    """
+
+
+def _contact_line() -> str:
+
+    parts = []
+
+    if WHATSAPP_NUMBER:
+        parts.append(f"WhatsApp: {WHATSAPP_NUMBER}")
+
+    if NOTIFICATION_EMAIL:
+        parts.append(f"Email: {NOTIFICATION_EMAIL}")
+
+    return " &nbsp;|&nbsp; ".join(parts) if parts else ""
+
+
+def render_business_email(order: dict, order_id: str):
+
+    rows = _order_email_rows(order, order_id)
+
+    intro_html = (
+        f"A new order request has just come in through the "
+        f"{_escape_html(BUSINESS_NAME)} website."
+    )
+
+    html = _render_email_html(
+        heading="New Order Received",
+        intro_html=intro_html,
+        rows=rows,
+        footer_html=(
+            "This is an automated notification from your "
+            "order system. Open the admin dashboard to view "
+            "or manage this order."
+        ),
+    )
+
+    text_lines = [
+        f"New order received - {BUSINESS_NAME}",
+        "",
+    ]
+
+    text_lines += [f"{label}: {value}" for label, value in rows]
+
+    text = "\n".join(text_lines)
+
+    return html, text
+
+
+def render_customer_email(order: dict, order_id: str):
+
+    name = order.get("name") or "there"
+
+    rows = _order_email_rows(order, order_id)
+
+    intro_html = (
+        f"Hi {_escape_html(name)},<br><br>"
+        f"Thank you for reaching out to {_escape_html(BUSINESS_NAME)}. "
+        f"Your order request has been received. Our team will "
+        f"contact you shortly to confirm the details."
+    )
+
+    contact_line = _contact_line()
+
+    footer_html = (
+        "We look forward to serving you."
+        + (f"<br><br>{contact_line}" if contact_line else "")
+    )
+
+    html = _render_email_html(
+        heading="Order Request Received",
+        intro_html=intro_html,
+        rows=rows,
+        footer_html=footer_html,
+    )
+
+    text_lines = [
+        f"Hi {name},",
+        "",
+        f"Thank you for reaching out to {BUSINESS_NAME}.",
+        "Your order request has been received. Our team will "
+        "contact you shortly to confirm the details.",
+        "",
+    ]
+
+    text_lines += [f"{label}: {value}" for label, value in rows]
+
+    if contact_line:
+        text_lines += ["", contact_line.replace("&nbsp;", " ")]
+
+    text = "\n".join(text_lines)
+
+    return html, text
+
+
+async def _send_resend_email(
+    to_email: str,
+    subject: str,
+    html: str,
+    text: str,
+) -> None:
+
+    if not RESEND_API_KEY or not EMAIL_FROM:
+
+        raise RuntimeError(
+            "Email notifications disabled: RESEND_API_KEY "
+            "or EMAIL_FROM missing."
+        )
+
+    payload = {
+        "from": EMAIL_FROM,
+        "to": [to_email],
+        "subject": subject,
+        "html": html,
+        "text": text,
+    }
+
+    async with httpx.AsyncClient(timeout=10.0) as client:
+
+        response = await client.post(
+            RESEND_API_URL,
+            headers={
+                "Authorization": f"Bearer {RESEND_API_KEY}",
+                "Content-Type": "application/json",
+            },
+            json=payload,
+        )
+
+        if response.status_code >= 400:
+
+            raise RuntimeError(
+                f"Resend API error {response.status_code}: "
+                f"{response.text[:300]}"
+            )
+
+
+async def send_business_notification_email(
+    order: dict,
+    order_id: str,
+) -> None:
+
+    if not NOTIFICATION_EMAIL:
+
+        logger.info(
+            "Email notifications disabled: "
+            "NOTIFICATION_EMAIL missing."
+        )
+        return
+
+    try:
+
+        html, text = render_business_email(order, order_id)
+
+        await _send_resend_email(
+            to_email=NOTIFICATION_EMAIL,
+            subject=(
+                f"\U0001F514 New Catering Order Received "
+                f"— {BUSINESS_NAME}"
+            ),
+            html=html,
+            text=text,
+        )
+
+        logger.info(
+            "Business notification email sent successfully "
+            "for order %s",
+            order_id,
+        )
+
+    except Exception as exc:
+
+        logger.error(
+            "Business notification email failed for order %s: %s",
+            order_id,
+            exc,
+        )
+
+
+async def send_customer_confirmation_email(
+    order: dict,
+    order_id: str,
+) -> None:
+
+    customer_email = (order.get("email") or "").strip()
+
+    if not customer_email:
+        return
+
+    try:
+
+        html, text = render_customer_email(order, order_id)
+
+        await _send_resend_email(
+            to_email=customer_email,
+            subject="Your Nasiib Catering Order Has Been Received",
+            html=html,
+            text=text,
+        )
+
+        logger.info(
+            "Customer confirmation email sent successfully "
+            "for order %s",
+            order_id,
+        )
+
+    except Exception as exc:
+
+        logger.error(
+            "Customer confirmation email failed for order %s: %s",
+            order_id,
+            exc,
+        )
+
+
+async def process_order_notifications(
+    order: dict,
+    order_id: str,
+) -> None:
+    """Runs in the background after the API response has already
+    been sent. Each notification is independent — one failing
+    never affects the other, and neither can affect the order."""
+
+    await send_business_notification_email(order, order_id)
+    await send_customer_confirmation_email(order, order_id)
 
 
 # ============================================================
@@ -1387,7 +1826,8 @@ async def delete_faq(
 
 @app.post("/api/orders")
 async def create_order(
-    order: OrderCreate
+    order: OrderCreate,
+    background_tasks: BackgroundTasks,
 ):
 
     document = {
@@ -1419,11 +1859,26 @@ async def create_order(
             document
         )
 
+        order_id = str(result.inserted_id)
+
+        logger.info(
+            "Order saved successfully: %s",
+            order_id,
+        )
+
+        # Order is already saved at this point. Notifications run
+        # in the background AFTER this response is returned, and
+        # any failure inside them is caught and logged internally
+        # — it can never change this response or fail the order.
+        background_tasks.add_task(
+            process_order_notifications,
+            document,
+            order_id,
+        )
+
         return {
             "success": True,
-            "order_id": str(
-                result.inserted_id
-            ),
+            "order_id": order_id,
             "message": (
                 "Order submitted successfully."
             ),
