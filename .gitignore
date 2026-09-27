@@ -1,0 +1,7 @@
+__pycache__/
+*.pyc
+*.zip
+.env
+.env.*
+!.env.example
+tmp/__pycache__/
