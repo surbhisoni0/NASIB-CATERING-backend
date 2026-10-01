@@ -106,10 +106,10 @@ CORS_ORIGINS = os.getenv(
 # than inventing new facts - see LANGUAGE_NAMES / system_prompt below.
 
 BUSINESS_CONTEXT_EN = """
-ADDRESS:  The Hague (Den Haag)
-PHONE:  +316 84527898.
+ADDRESS: Den Haag (The Hague), Netherlands
+PHONE: +316 84527898 (+31 6 84527898)
 EMAIL: info@nasiibcatering.nl
-SOCIAL MEDIA: @Nasiib.catering (TikTok & Instagram)
+SOCIAL MEDIA: @Nasiib.catering (TikTok & Instagram), Snapchat: nasiibcatering
 SERVICE AREA: All of the Netherlands. Events outside the Netherlands
 (e.g. Belgium) can be requested - confirm feasibility via WhatsApp or
 the enquiry form.
@@ -122,7 +122,7 @@ OPENING HOURS:
 - Sunday: 12:00 - 22:00
 
 ABOUT & EXPERIENCE: Nasiib Catering is a Somali family kitchen bringing
-recipes from Mogadishu and Hargeisa to Amsterdam, operating for over
+recipes from Mogadishu and Hargeisa to The Hague, operating for over
 5+ years. After years of building a strong reputation through
 word-of-mouth and personal networks, the business now also takes
 bookings through this website. All dishes are prepared under the
@@ -190,13 +190,61 @@ needs.
 CHARITY: Nasiib Catering also runs charity food programs - Ramadan
 iftar meals, weekly family grocery packs, and food-security aid
 initiatives in Somalia (Mogadishu, Hargeisa, Kismayo).
+
+
+DETAILED MENU (as published on the Menu page - every package can be
+customised; "p.p." = per person):
+
+THE STARTER (basic package)
+- Appetizer: Xalwo en Buskut - a warm, traditional starter: rich, sweet
+  Somali Halwo with handmade biscuits.
+- Main course: Bariis Isku-karis leh Hilib - richly spiced Somali rice
+  (Xawaash spice blend) with tender, slow-cooked lamb or beef. Salad,
+  Shidni/Basbas (spicy or mild) and Moos (banana).
+- Drinks: soft drinks and chilled water; Shaah iyo Bun - traditional tea
+  with cardamom and clove, and freshly brewed coffee.
+- Price p.p.: 150-200 guests EUR 27.50 | 200-250 EUR 27.00 | 250-300
+  EUR 25.50 | 300-350 EUR 25.00 | 350-400 EUR 24.00 | 400+ EUR 23.50.
+
+THE PREMIUM (most popular)
+- Appetizers: Xalwo en Buskut; Sambuus (crispy, handmade, filled with
+  spiced minced meat or vegetables); Loempia's (minced meat, chicken or
+  vegetarian).
+- Main course: Bariis Isku-karis leh Hilib (lamb or beef); Hilib Digaag
+  (tender oven-roasted chicken with its sauce); Salad, Shidni/Basbas and
+  Moos.
+- Dessert: ice cake with seasonal fruit (light, creamy, festively
+  decorated with fresh fruit).
+- Drinks: Mango Lassi (the Somali way); soft drinks (Fanta, Cola, Spa
+  Blue, Spa Red); Shaah iyo Bun (tea with cardamom and clove, fresh
+  coffee).
+- Price p.p.: 150-200 guests EUR 34.00 | 200-250 EUR 33.00 | 250-300
+  EUR 31.50 | 300-350 EUR 30.50 | 350-400 EUR 29.50 | 400+ EUR 29.00.
+
+THE EXCELLENCE (signature / luxury package)
+- Welcome table: guests are welcomed at the entrance with a table full
+  of sweets - stuffed dates with assorted nuts and toppings, assorted
+  mini fruit tarts, assorted nuts and handmade biscuits, warm tea and
+  coffee.
+- Appetizers: Sambuus en Loempia (savoury, crispy bites); Suqaar iyo
+  Lahooh/Canjeero (tender diced spiced meat on soft Somali pancakes).
+- Main course: Bariis Isku-karis leh Hilib (lamb or beef); Hilib Digaag
+  (oven-roasted chicken); Salad, Shidni/Basbas and Moos.
+- Dessert (choose one): Tiramisu, Chocolate Cake, or a luxury ice cake
+  with delicacy fruits such as mangosteen, fresh figs, dragon fruit.
+- Drinks: Mojitos (Classic, Strawberry, Passion Fruit Virgin) and Mango
+  Lassi; soft drinks (Fanta, Cola, Spa Blue, Spa Red); Shaah iyo Bun.
+- Price p.p.: 150-200 guests EUR 43.00 | 200-250 EUR 42.00 | 250-300
+  EUR 40.00 | 300-350 EUR 39.00 | 350-400 EUR 37.50 | 400+ EUR 36.50.
+
+Prices on the Menu page are indicative and depend on the number of guests.
 """.strip()
 
 BUSINESS_CONTEXT_NL = """
-ADRES: Damrak 70, 1012 LM Amsterdam, Nederland
-TELEFOON: +31 20 123 4567
+ADRES: Den Haag, Nederland
+TELEFOON: +316 84527898 (+31 6 84527898)
 E-MAIL: info@nasiibcatering.nl
-SOCIAL MEDIA: @Nasiib.catering (TikTok & Instagram)
+SOCIAL MEDIA: @Nasiib.catering (TikTok & Instagram), Snapchat: nasiibcatering
 WERKGEBIED: Heel Nederland. Evenementen buiten Nederland (bijv. België)
 kunnen worden aangevraagd - bevestig de haalbaarheid via WhatsApp of
 het contactformulier.
@@ -209,7 +257,7 @@ OPENINGSTIJDEN:
 - Zondag: 12:00 - 22:00
 
 OVER ONS & ERVARING: Nasiib Catering is een Somalische familiekeuken die
-recepten uit Mogadishu en Hargeisa naar Amsterdam brengt en bestaat al
+recepten uit Mogadishu en Hargeisa naar Den Haag brengt en bestaat al
 ruim 5+ jaar. Na jarenlang succesvol te hebben gewerkt via netwerk en
 mond-tot-mondreclame, neemt het bedrijf nu ook boekingen aan via deze
 website. Alle gerechten worden bereid onder leiding van de chef-kok, die
@@ -280,11 +328,58 @@ GOEDE DOELEN: Nasiib Catering voert ook goededoelenprogramma's uit -
 iftar-maaltijden tijdens de Ramadan, wekelijkse boodschappenpakketten
 voor gezinnen, en initiatieven voor voedselzekerheid in Somalië
 (Mogadishu, Hargeisa, Kismayo).
+
+
+UITGEBREID MENU (zoals gepubliceerd op de Menu-pagina - elk pakket kan
+worden aangepast; "p.p." = per persoon):
+
+THE STARTER (basispakket)
+- Voorgerecht: Xalwo en Buskut - warm, traditioneel: rijke, zoete Somalische
+  Halwo met handgemaakte koekjes.
+- Hoofdgerecht: Bariis Isku-karis leh Hilib - rijk gekruide Somalische
+  rijst (Xawaash-kruidenmix) met malse, langzaam gegaarde lam of rund.
+  Salade, Shidni/Basbas (pittig of mild) en Moos (banaan).
+- Dranken: frisdrank en gekoeld water; Shaah iyo Bun - traditionele thee
+  met kardemom en kruidnagel en vers gezette koffie.
+- Prijs p.p.: 150-200 gasten € 27,50 | 200-250 € 27,00 | 250-300 € 25,50 |
+  300-350 € 25,00 | 350-400 € 24,00 | 400+ € 23,50.
+
+THE PREMIUM (meest gekozen)
+- Voorgerechten: Xalwo en Buskut; Sambuus (krokant, handgemaakt, gevuld met
+  gekruid gehakt of groenten); Loempia's (gehakt, kip of vegetarisch).
+- Hoofdgerecht: Bariis Isku-karis leh Hilib (lam of rund); Hilib Digaag
+  (malse kip uit de oven met saus); Salade, Shidni/Basbas en Moos.
+- Dessert: ijstaart met seizoensfruit (licht, romig, feestelijk versierd
+  met vers fruit).
+- Dranken: Mango Lassi (op z'n Somalisch); frisdrank (Fanta, Cola, Spa
+  Blauw, Spa Rood); Shaah iyo Bun (thee met kardemom en kruidnagel, verse
+  koffie).
+- Prijs p.p.: 150-200 gasten € 34,00 | 200-250 € 33,00 | 250-300 € 31,50 |
+  300-350 € 30,50 | 350-400 € 29,50 | 400+ € 29,00.
+
+THE EXCELLENCE (signature / luxe pakket)
+- Welkomsttafel: gasten worden bij de ingang ontvangen met een tafel vol
+  zoetigheden - gevulde dadels met diverse noten en toppings, mini
+  fruittaartjes, diverse noten en handgemaakte koekjes, warme thee en
+  koffie.
+- Voorgerechten: Sambuus en Loempia (hartige, krokante hapjes); Suqaar iyo
+  Lahooh/Canjeero (malse gekruide vleesblokjes op zachte Somalische
+  pannenkoeken).
+- Hoofdgerecht: Bariis Isku-karis leh Hilib (lam of rund); Hilib Digaag
+  (kip uit de oven); Salade, Shidni/Basbas en Moos.
+- Dessert (keuze): Tiramisu, Chocoladetaart of een luxe ijstaart met
+  delicatesse-fruit zoals mangostan, verse vijgen, dragonfruit.
+- Dranken: Mojito's (Classic, Strawberry, Passion Fruit Virgin) en Mango
+  Lassi; frisdrank (Fanta, Cola, Spa Blauw, Spa Rood); Shaah iyo Bun.
+- Prijs p.p.: 150-200 gasten € 43,00 | 200-250 € 42,00 | 250-300 € 40,00 |
+  300-350 € 39,00 | 350-400 € 37,50 | 400+ € 36,50.
+
+Prijzen op de Menu-pagina zijn indicatief en afhankelijk van het aantal gasten.
 """.strip()
 
 BUSINESS_CONTEXT_SO = """
 ADDRESKA: Den Haag (The Hague), Nederland
-TELEFOONKA: +31 6 84527898
+TELEFOONKA: +316 84527898 (+31 6 84527898)
 EMAILKA: info@nasiibcatering.nl
 SOCIAL MEDIA: @Nasiib.catering (TikTok iyo Instagram), Snapchat: nasiibcatering
 GOOBTA XIDHIIDHKA SHAQADA: Dhammaan Nederland. Dhacdooyinka ka baxsan
@@ -375,6 +470,57 @@ fulisaa barnaamijyo samafal oo cunto ah - cunto iftaar ah bisha Ramadaan,
 xirmooyin raashin ah oo todobaadle ah oo qoysaska loo qaybiyo, iyo
 hindisayaal gargaar amniga cuntada ee Soomaaliya (Muqdisho, Hargeysa,
 Kismaayo).
+
+
+MENU-GA OO FAAHFAAHSAN (sida ku qoran bogga Menu - baakad kasta waa la
+beddeli karaa; "qofkiiba" = qof walba):
+
+THE STARTER (baakadda aasaasiga ah)
+- Hordhac: Xalwo en Buskut - bilow diirran oo dhaqameed ah: Xalwo
+  Soomaaliyeed oo macaan oo lala cuno buskud gacanta lagu sameeyay.
+- Cunto weyn: Bariis Isku-karis leh Hilib - bariis Soomaali ah oo si fiican
+  loo xawaashay (xawaash dhaqameed) oo lagu adeegayo hilib ari ama lo'
+  oo jilicsan oo si tartiib ah loo kariyey. Salad, Shidni/Basbas (kulul ama
+  fudud) iyo Moos.
+- Cabitaan: cabitaanno qabow iyo biyo qabow; Shaah iyo Bun - shaah dhaqameed
+  oo leh hayl iyo qorfe, iyo bun cusub oo la kariyay.
+- Qiimaha qofkiiba: 150-200 marti EUR 27.50 | 200-250 EUR 27.00 | 250-300
+  EUR 25.50 | 300-350 EUR 25.00 | 350-400 EUR 24.00 | 400+ EUR 23.50.
+
+THE PREMIUM (tan ugu badan la doorto)
+- Hordhac: Xalwo en Buskut; Sambuus (qallalan, gacanta lagu sameeyay, ku
+  buuxa hilib shiidan oo xawaash leh ama khudaar); Loempia (hilib shiidan,
+  digaag ama vegetarian).
+- Cunto weyn: Bariis Isku-karis leh Hilib (ari ama lo'); Hilib Digaag
+  (digaag jilicsan oo foorno lagu dubay oo lagu adeegayo saylkiisa); Salad,
+  Shidni/Basbas iyo Moos.
+- Macmacaan: doolshe barafle (ice cake) oo leh miro xilliyeed oo cusub
+  (fudud, kareemo leh, si dabaal ah loogu qurxiyay miro cusub).
+- Cabitaan: Mango Lassi (sida Soomaalida); cabitaanno qabow (Fanta, Kola,
+  Spa buluug, Spa casaan); Shaah iyo Bun (shaah hayl iyo qorfe leh, bun cusub).
+- Qiimaha qofkiiba: 150-200 marti EUR 34.00 | 200-250 EUR 33.00 | 250-300
+  EUR 31.50 | 300-350 EUR 30.50 | 350-400 EUR 29.50 | 400+ EUR 29.00.
+
+THE EXCELLENCE (baakadda gaarka ah / raaxada)
+- Miiska soo dhaweynta: martida waxaa albaabka lagu soo dhaweynayaa miis ay
+  ku buuxaan macmacaan - timir la buuxiyay lawska iyo dushiisa kala
+  duwan, keeg yaryar oo midho ah, lawska kala duwan iyo buskud gacanta lagu
+  sameeyay, shaah iyo bun diiran.
+- Hordhac: Sambuus en Loempia (cunto yar oo qallalan oo dhadhan leh); Suqaar
+  iyo Lahooh/Canjeero (suqaar hilib ah oo jilicsan oo xawaash leh, lagu
+  adeegayo canjeero/lahooh dhaqameed ah).
+- Cunto weyn: Bariis Isku-karis leh Hilib (ari ama lo'); Hilib Digaag (digaag
+  foorno lagu dubay); Salad, Shidni/Basbas iyo Moos.
+- Macmacaan (mid dooro): Tiramisu, Doolshaha Shukulaatada, ama doolshe
+  barafle qaali ah oo leh miro gaar ah sida Mangosteen, Berde cusub iyo
+  Dragon fruit.
+- Cabitaan: Mojito (caadi ah, Strawberry, Passion Fruit oo aan khamri
+  lahayn) iyo Mango Lassi; cabitaanno qabow (Fanta, Kola, Spa buluug, Spa
+  casaan); Shaah iyo Bun.
+- Qiimaha qofkiiba: 150-200 marti EUR 43.00 | 200-250 EUR 42.00 | 250-300
+  EUR 40.00 | 300-350 EUR 39.00 | 350-400 EUR 37.50 | 400+ EUR 36.50.
+
+Qiimaha bogga Menu waa tilmaam ah waxayna ku xiran yihiin tirada martida.
 """.strip()
 
 # Per-language verified knowledge base. Languages without a dedicated
@@ -846,9 +992,11 @@ def somali_chat_fallback(user_message: str) -> str:
         return ("Salaan! Soo dhawoow Nasiib Catering. Waxaan kaa caawin karaa "
                 "menu-ga, catering-ka, waqtiyada shaqada, cuntada halal iyo sida loo dalbado.")
     if any(w in m for w in ("menu", "qiime", "price", "baakad", "package", "cunto", "lacag", "dish")):
-        return ("Waxaan bixinnaa 3 baakadood oo catering ah: The Starter, The Premium iyo "
-                "The Excellence, mid walbana waa la beddeli karaa. Fiiri bogga Menu si aad u aragto "
-                "waxa ku jira iyo qiimaha qofkiiba, ama codso quote si aad u hesho qiime gaar ah." + wa)
+        return ("Menu-gayagu wuxuu leeyahay 3 baakadood oo la beddeli karo. The Starter (EUR 23.50 ilaa 27.50 "
+                "qofkiiba): Xalwo & Buskut, Bariis leh hilib ari ama lo', salad iyo cabitaan. The Premium "
+                "(EUR 29.00 ilaa 34.00): waxaa lagu daray Sambuus, Loempia, Hilib Digaag, doolshe barafle iyo "
+                "Mango Lassi. The Excellence (EUR 36.50 ilaa 43.00): miis macmacaan soo dhaweyn ah, hordhac dheeraad ah, "
+                "macmacaan la doorto iyo Mojito. Qiimahan wuxuu quseeyaa 150+ marti - fiiri bogga Menu." + wa)
     if any(w in m for w in ("saac", "waqti", "furan", "xidh", "hour", "open")):
         return ("Waan furan nahay Isniin ilaa Khamiis 11:00 - 22:00, Jimce iyo Sabti 11:00 - 23:30, "
                 "iyo Axad 12:00 - 22:00.")
@@ -889,15 +1037,17 @@ def local_chat_fallback(user_message: str, lang: str = "en") -> str:
 
     if "menu" in message or "price" in message or "prijs" in message or "dish" in message or "gerecht" in message or "pakket" in message or "package" in message:
         return (
-            "We bieden 3 cateringpakketten: The Starter, The Premium en The "
-            "Excellence, elk volledig aanpasbaar. Bekijk de Menu-pagina voor "
-            "de volledige inhoud en prijzen per persoon, of vraag een offerte "
-            "aan voor een prijs op maat."
+            "Ons menu bestaat uit 3 aanpasbare cateringpakketten. The Starter (€ 23,50 tot "
+            "27,50 p.p.): Xalwo & Buskut, Bariis met lam of rund, salade, dranken. The Premium "
+            "(€ 29,00 tot 34,00 p.p.): extra Sambuus, Loempia, kip, ijstaart en Mango Lassi. "
+            "The Excellence (€ 36,50 tot 43,00 p.p.): welkomsttafel met zoetigheden, extra "
+            "voorgerechten, dessert naar keuze en Mojito's. Prijzen gelden vanaf 150 gasten - zie de Menu-pagina."
             if is_nl else
-            "We offer 3 catering packages: The Starter, The Premium and The "
-            "Excellence, each fully customisable. Open the Menu page for the "
-            "full contents and per-person pricing, or request a quote for "
-            "pricing tailored to your event."
+            "Our menu has 3 customisable catering packages. The Starter (from EUR 23.50 to "
+            "27.50 p.p.): Xalwo & Buskut, Bariis with lamb or beef, salad, drinks. The Premium "
+            "(EUR 29.00 to 34.00 p.p.): adds Sambuus, Loempia, chicken, ice cake and Mango Lassi. "
+            "The Excellence (EUR 36.50 to 43.00 p.p.): sweets welcome table, extra appetizers, "
+            "dessert of choice and Mojitos. Prices apply to 150+ guests - see the Menu page."
         )
 
     if "hour" in message or "open" in message or "close" in message or "tijd" in message or "openingstijd" in message:
@@ -1079,13 +1229,19 @@ VERIFIED BUSINESS INFORMATION ({language_name if lang in BUSINESS_CONTEXTS else 
 ANSWER GUIDE (how to apply the facts above - applies in every language):
 - Style: concise by default (a few sentences); give more detail only
   when asked. Be warm, professional and trustworthy.
-- Pricing: the published per-person prices apply to events of 150+
-  guests. 150 guests falls in the 150-200 tier; 200 guests is also in
-  the 150-200 tier; 400+ guests gets the lowest listed price. For
-  200-400 guests no intermediate tiers are published: say the price
-  falls between the listed tiers and the exact figure is confirmed in
-  the quote. You may multiply guests x per-person price as a rough
-  illustration, clearly labelled indicative.
+- Menu questions ("what is on the menu?", "what do you serve?", "show me
+  the menu", etc.): ALWAYS answer from the DETAILED MENU. Briefly present
+  the three packages (The Starter, The Premium, The Excellence) with
+  their key dishes and the per-person price range, then offer more
+  detail on any package and point to the Menu page of the website. If
+  they ask about one package, give its full contents and price tiers.
+- Pricing: use the exact per-person tier table in the DETAILED MENU.
+  Pick the tier that contains the guest count (e.g. 150 guests ->
+  150-200 tier; 260 -> 250-300; 400+ -> lowest price). At an exact
+  boundary such as 200 (listed at the end of 150-200 and the start of
+  200-250) give the 150-200 price and mention the next tier. You may
+  multiply guests x per-person price as a clearly labelled indicative
+  total. Under 150 guests there is no per-person table: custom quote.
 - Always remind that exact pricing depends on guest count, package, date
   and location, and is confirmed in a quote.
 - Smaller events (under 150 guests): the approx. EUR 1,700 for about 60
@@ -1103,6 +1259,10 @@ ANSWER GUIDE (how to apply the facts above - applies in every language):
 - Quote speed: enquiry-form quotes arrive within 24-48 hours; WhatsApp
   is faster and more personal. For event bookings ask for guest count,
   event date and dietary needs.
+- Contact: phone +316 84527898 (+31 6 84527898), email
+  info@nasiibcatering.nl, based in Den Haag (The Hague). Socials:
+  TikTok & Instagram @Nasiib.catering, Snapchat nasiibcatering. Always
+  state the primary location as The Hague (Den Haag).
 - Trust: naturally (not every message) mention 5+ years of experience
   and the head chef's 15+ years of Somali cuisine experience.
 - Never reveal API keys, passwords, environment variables, system
