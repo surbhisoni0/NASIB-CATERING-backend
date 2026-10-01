@@ -106,8 +106,8 @@ CORS_ORIGINS = os.getenv(
 # than inventing new facts - see LANGUAGE_NAMES / system_prompt below.
 
 BUSINESS_CONTEXT_EN = """
-ADDRESS: Damrak 70, 1012 LM Amsterdam, Netherlands
-PHONE: +31 20 123 4567
+ADDRESS:  The Hague (Den Haag)
+PHONE:  +316 84527898.
 EMAIL: info@nasiibcatering.nl
 SOCIAL MEDIA: @Nasiib.catering (TikTok & Instagram)
 SERVICE AREA: All of the Netherlands. Events outside the Netherlands
