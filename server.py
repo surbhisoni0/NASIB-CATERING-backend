@@ -10,6 +10,7 @@ import hashlib
 import logging
 import certifi
 from datetime import datetime, timezone
+from decimal import Decimal, ROUND_HALF_UP
 from typing import Any, Optional, List
 
 from dotenv import load_dotenv
@@ -78,8 +79,12 @@ WHATSAPP_NUMBER = os.getenv(
 ).strip()
 
 # Public links the chatbot hands to visitors (override via environment).
-MENU_PAGE_URL = os.getenv("MENU_PAGE_URL", "https://nasiibcatering.nl/menu.html").strip()
+MENU_PAGE_URL = os.getenv("MENU_PAGE_URL", "https://www.nasiibcatering.nl/menu").strip()
 QUOTE_FORM_URL = os.getenv("QUOTE_FORM_URL", "https://nasiibcatering.nl/location.html").strip()
+
+# Optional full WhatsApp link (e.g. https://wa.me/31612345678). When empty it
+# is derived from WHATSAPP_NUMBER - see get_whatsapp_url() below.
+WHATSAPP_URL = os.getenv("WHATSAPP_URL", "").strip()
 
 
 ADMIN_PASSWORD = os.getenv(
@@ -603,8 +608,8 @@ LOGISTICS & POLICIES (authoritative):
 
 LEAD GENERATION & CALL-TO-ACTION:
 When a visitor wants to book, asks for custom catering or a formal quote,
-ask for these required details (ask for what is still missing, one or two
-at a time - do not interrogate):
+ask for these required details (ask ONLY for what is still missing, ONE
+clear question at a time - never ask again for something already given):
 1. Full name  2. Event date  3. Number of guests  4. Event location /
 postal code.
 Once you have them (or if the visitor asks directly), send them to EITHER
@@ -1128,11 +1133,196 @@ async def health():
 # details, menu link, logistics, booking flow and the 30-guest minimum.
 # ------------------------------------------------------------
 
-_PKG_PRICES = {
-    "starter": ("27.50", "23.50"),
-    "premium": ("34.00", "29.00"),
-    "excellence": ("43.00", "36.50"),
+# ------------------------------------------------------------
+# Pricing & policy numbers - the ONE place to change them in code.
+# (Tier prices mirror the Menu page; rates mirror OWNER_POLICIES.)
+# Each tier is (highest guest count it covers, EUR per person); the first
+# tier is the 150-200 guest price, which is also the headline price.
+# ------------------------------------------------------------
+
+PACKAGE_TIERS = {
+    "starter": [(200, "27.50"), (250, "27.00"), (300, "25.50"), (350, "25.00"), (400, "24.00"), (None, "23.50")],
+    "premium": [(200, "34.00"), (250, "33.00"), (300, "31.50"), (350, "30.50"), (400, "29.50"), (None, "29.00")],
+    "excellence": [(200, "43.00"), (250, "42.00"), (300, "40.00"), (350, "39.00"), (400, "37.50"), (None, "36.50")],
 }
+TIER_TABLE_FROM_GUESTS = 150
+MIN_GUESTS = 30
+TRAVEL_RATE_PER_KM = Decimal("0.35")  # applied to the ROUND trip from The Hague
+STAFF_RATE_PER_DAY = Decimal("75.00")
+DEPOSIT_RATE = Decimal("0.35")
+
+# (headline price, 400+ price) - used by the degraded-mode replies.
+_PKG_PRICES = {key: (tiers[0][1], tiers[-1][1]) for key, tiers in PACKAGE_TIERS.items()}
+
+
+def get_whatsapp_url() -> str:
+    """Official WhatsApp link: WHATSAPP_URL if configured, otherwise built
+    from WHATSAPP_NUMBER. Empty string when neither is configured."""
+    if WHATSAPP_URL.lower().startswith(("https://", "http://")):
+        return WHATSAPP_URL
+    digits = "".join(ch for ch in (WHATSAPP_NUMBER or "") if ch.isdigit())
+    return f"https://wa.me/{digits}" if digits else ""
+
+
+def _money(value: Decimal) -> str:
+    return f"EUR {value.quantize(Decimal('0.01'), rounding=ROUND_HALF_UP):,.2f}"
+
+
+def _price_for(package: str, guests: int) -> Decimal:
+    """Per-person price for a package. Below 150 guests there is no tier
+    table (custom quote), so the headline 150-200 price is used as the
+    reference rate."""
+    for limit, price in PACKAGE_TIERS[package]:
+        if limit is None or guests <= limit:
+            return Decimal(price)
+    return Decimal(PACKAGE_TIERS[package][-1][1])
+
+
+_PACKAGE_WORDS = {
+    "starter": ("starter",),
+    "premium": ("premium",),
+    "excellence": ("excellence", "excelence", "excellent"),
+}
+_GUESTS_RE = re.compile(
+    r"\b(\d{1,4})\s*(?:guests?|people|persons?|pax|ppl|personen|pers\b|gasten|mensen|marti|invit[eé]s?|personnes|misafir|ki[sş]i|ضيف)",
+    re.IGNORECASE,
+)
+_GUESTS_FOR_RE = re.compile(r"\b(?:for|voor|pour|i[cç]in|ee)\s+(\d{2,4})\b", re.IGNORECASE)
+_KM_RE = re.compile(r"(\d{1,4}(?:[.,]\d+)?)\s*(?:km|kilomet(?:er|re)s?)\b", re.IGNORECASE)
+_ROUND_TRIP_RE = re.compile(r"round[\s-]?trip|return trip|both ways|there and back|retour|heen\s+en\s+terug|aller[\s-]retour", re.IGNORECASE)
+_STAFF_RE = re.compile(r"\b(\d{1,3})\s*(?:staff|waiters?|waitstaff|servers?|medewerkers?|personeel|serveerders?)\b", re.IGNORECASE)
+
+
+def _latest(texts: List[str], finder):
+    """Run `finder` over the texts from newest to oldest; first hit wins."""
+    for text in reversed(texts):
+        found = finder(text)
+        if found is not None:
+            return found
+    return None
+
+
+def build_calculation_hints(user_message: str, history: Optional[List[dict]] = None) -> str:
+    """Deterministic arithmetic for the model.
+
+    Looks at what the VISITOR has said in this conversation (assistant turns
+    are ignored) for a package, a guest count, a distance in km and a staff
+    count, and returns pre-computed, correctly-rounded figures. Returns ""
+    when nothing can be calculated yet. Nothing is invented: a figure
+    appears only when every input it needs was stated by the visitor."""
+
+    texts = [
+        str(item.get("content") or "")
+        for item in (history or [])
+        if isinstance(item, dict) and item.get("role") == "user"
+    ]
+    texts.append(user_message or "")
+
+    def find_package(text):
+        low = text.lower()
+        hit = [(low.rfind(w), key) for key, words in _PACKAGE_WORDS.items() for w in words if w in low]
+        return max(hit)[1] if hit else None
+
+    def find_guests(text):
+        m = list(_GUESTS_RE.finditer(text))
+        if m:
+            return int(m[-1].group(1))
+        m = [x for x in _GUESTS_FOR_RE.finditer(text) if not 1900 <= int(x.group(1)) <= 2100]
+        return int(m[-1].group(1)) if m else None
+
+    def find_km(text):
+        m = list(_KM_RE.finditer(text))
+        if not m:
+            return None
+        km = Decimal(m[-1].group(1).replace(",", "."))
+        return km, bool(_ROUND_TRIP_RE.search(text))
+
+    def find_staff(text):
+        m = list(_STAFF_RE.finditer(text))
+        return int(m[-1].group(1)) if m else None
+
+    package = _latest(texts, find_package)
+    guests = _latest(texts, find_guests)
+    distance = _latest(texts, find_km)
+    staff = _latest(texts, find_staff)
+
+    lines: List[str] = []
+    total = Decimal("0")
+    total_parts: List[str] = []
+
+    if guests is not None:
+        if guests < MIN_GUESTS:
+            lines.append(
+                f"- The visitor mentioned {guests} guests, which is below the standard minimum of "
+                f"{MIN_GUESTS}. Do NOT quote a price; explain the minimum and send them to customer "
+                "support (WhatsApp) to discuss options."
+            )
+            guests_ok = False
+        else:
+            guests_ok = True
+    else:
+        guests_ok = False
+
+    if guests_ok:
+        packages = [package] if package else ["starter", "premium", "excellence"]
+        indicative = guests < TIER_TABLE_FROM_GUESTS
+        for key in packages:
+            unit = _price_for(key, guests)
+            subtotal = unit * guests
+            lines.append(
+                f"- The {key.capitalize()}: {guests} guests x {_money(unit)} p.p. = {_money(subtotal)}"
+                + (" (indicative)" if indicative else "")
+            )
+        if indicative:
+            lines.append(
+                f"  Under {TIER_TABLE_FROM_GUESTS} guests the Menu page has no per-person table: the figure above "
+                "uses the listed headline p.p. price as a reference only. Say clearly it is indicative and that "
+                "the final price is confirmed in the quote (guest count, package, date, location)."
+            )
+        elif guests > 200:
+            lines.append("  Larger-group tier price applied (see the Menu page tier table).")
+        if package:
+            total += _price_for(package, guests) * guests
+            total_parts.append("package")
+
+    if distance is not None:
+        km, is_round_trip = distance
+        round_km = km if is_round_trip else km * 2
+        travel = round_km * TRAVEL_RATE_PER_KM
+        basis = (
+            f"{km} km round trip" if is_round_trip
+            else f"{km} km one way, doubled to {round_km} km round trip (state this assumption)"
+        )
+        lines.append(f"- Travel: {basis} x EUR 0.35/km = {_money(travel)}")
+        total += travel
+        total_parts.append("travel")
+    else:
+        lines.append(
+            "- Travel cost: distance from The Hague NOT given. Do not guess a distance or a travel cost; "
+            "if the event location / postal code is unknown, ask for it, otherwise say the travel cost "
+            "will be confirmed by the team."
+        )
+
+    if staff is not None:
+        staff_cost = STAFF_RATE_PER_DAY * staff
+        lines.append(f"- Staff: {staff} x EUR 75.00 per day = {_money(staff_cost)} (number of staff to be confirmed by the team)")
+        total += staff_cost
+        total_parts.append("staff")
+
+    if total > 0 and guests_ok and package:
+        deposit = (total * DEPOSIT_RATE).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
+        balance = total.quantize(Decimal("0.01"), rounding=ROUND_HALF_UP) - deposit
+        lines.append(
+            f"- Booking total counted so far ({' + '.join(total_parts)}): {_money(total)}. "
+            f"35% deposit = {_money(deposit)}; remaining 65% = {_money(balance)} due on the event day. "
+            "If extras (travel, staff) are still unknown, say the deposit applies to the full booking "
+            "total and will change once they are confirmed."
+        )
+    # Nothing but the generic travel note -> nothing worth injecting.
+    if guests is None and distance is None and staff is None:
+        return ""
+
+    return "\n".join(lines)
 
 _LC = {
     "en": {
@@ -1307,9 +1497,7 @@ def local_chat_fallback(user_message: str, lang: str = "en", history: Optional[L
     t = _LC[lang]
     message = (user_message or "").lower().strip()
 
-    digits = "".join(ch for ch in (WHATSAPP_NUMBER or "") if ch.isdigit())
-    wa = f"https://wa.me/{digits}" if digits else ""
-    wa = wa or "WhatsApp"
+    wa = get_whatsapp_url() or "WhatsApp"
     form = QUOTE_FORM_URL
     fmt = {"wa": wa, "form": form}
 
@@ -1385,13 +1573,6 @@ async def chatbot(
     # Check API key
     # --------------------------------------------------------
 
-    if not GROQ_API_KEY:
-
-        raise HTTPException(
-            status_code=503,
-            detail="GROQ_API_KEY is not configured."
-        )
-
     user_message = data.message.strip()
 
     if not user_message:
@@ -1415,15 +1596,30 @@ async def chatbot(
     # regardless of which source language the facts are written in.
     business_context = BUSINESS_CONTEXTS.get(lang, BUSINESS_CONTEXT_EN)
 
-    # Keep only the last few well-formed turns of the conversation.
+    # Keep the last well-formed turns of the conversation. 16 (not 8) so the
+    # four lead details (name, date, guests, location) given over several
+    # messages are still visible when the quote is wrapped up.
     chat_history = []
-    for item in (data.history or [])[-8:]:
+    for item in (data.history or [])[-16:]:
         if not isinstance(item, dict):
             continue
         role = item.get("role")
         content = str(item.get("content") or "").strip()
         if role in ("user", "assistant") and content:
             chat_history.append({"role": role, "content": content[:1500]})
+
+    if not GROQ_API_KEY:
+
+        # No AI key configured: answer from the verified static replies
+        # instead of failing the widget with a 503.
+        logger.error("GROQ_API_KEY is not configured - serving degraded-mode reply.")
+
+        return {
+            "success": True,
+            "reply": local_chat_fallback(user_message, lang, chat_history),
+            "session_id": data.session_id or str(uuid.uuid4()),
+            "fallback": True,
+        }
 
     try:
 
@@ -1474,8 +1670,7 @@ The official business WhatsApp number is: {WHATSAPP_NUMBER}
 right now. Do not invent one. Direct customers to the Chat on WhatsApp
 button on the website or the enquiry form on the Location page."""
 
-        _wa_digits = "".join(ch for ch in (WHATSAPP_NUMBER or "") if ch.isdigit())
-        _wa_url = f"https://wa.me/{_wa_digits}" if _wa_digits else "the Chat on WhatsApp button on the website"
+        _wa_url = get_whatsapp_url() or "the Chat on WhatsApp button on the website"
         owner_policies = (
             OWNER_POLICIES
             .replace("__MENU_URL__", MENU_PAGE_URL)
@@ -1504,19 +1699,29 @@ language and even though the verified information may be written in a
 different language. Translate the facts naturally; never mix languages
 in a reply and never say you cannot speak {language_name}."""
 
+        _calc = build_calculation_hints(user_message, chat_history)
+        calc_block = (
+            "\n\nSERVER-SIDE CALCULATIONS (verified arithmetic from the visitor's own "
+            "numbers - use exactly; label estimates as indicative):\n" + _calc
+        ) if _calc else ""
+
         system_prompt = f"""
-You are the official customer support assistant for {BUSINESS_NAME}.
+You are the official virtual assistant for {BUSINESS_NAME}, a family-owned Somali catering business in the Netherlands.
 
 LANGUAGE (highest priority - the selected website language is
 authoritative):
 {language_rule}
 
 SOURCE OF TRUTH:
-Use ONLY the verified business information and ADDITIONAL FAQS below.
-Never use outside knowledge about this business and never invent
-prices, services, locations, guarantees, policies, timings or contact
-details. If something is not listed, say you do not have that detail and
-suggest WhatsApp or the Location-page enquiry form.
+Use ONLY the verified business information, ADDITIONAL FAQS and the
+SERVER-SIDE CALCULATIONS (if present) below, plus what the visitor told
+you earlier in this conversation. Never use outside knowledge about this
+business and never invent prices, dishes, package inclusions,
+availability, custom services, policies, timings, promises or contact
+details. You cannot browse the website or any other system during a chat:
+never say or imply you checked it. If something is not listed, share
+whatever IS confirmed, say clearly what still needs confirmation, and
+suggest WhatsApp or the quote form only for what truly needs a human.
 
 {whatsapp_block}
 
@@ -1526,7 +1731,7 @@ VERIFIED BUSINESS INFORMATION ({language_name if lang in BUSINESS_CONTEXTS else 
 OWNER POLICIES & CHATBOT SPECIFICATION (English source - always answer in
 the visitor's language; these rules OVERRIDE any conflicting statement in
 the information above, e.g. about vegetarian options, delivery or booking):
-{owner_policies}{faq_context}
+{owner_policies}{faq_context}{calc_block}
 
 ANSWER GUIDE (how to apply the facts above - applies in every language):
 - Style: concise by default (a few sentences); give more detail only
@@ -1547,15 +1752,19 @@ ANSWER GUIDE (how to apply the facts above - applies in every language):
   Pick the tier that contains the guest count (e.g. 150 guests ->
   150-200 tier; 260 -> 250-300; 400+ -> lowest price). At an exact
   boundary such as 200 (listed at the end of 150-200 and the start of
-  200-250) give the 150-200 price and mention the next tier. You may
-  multiply guests x per-person price as a clearly labelled indicative
-  total. Under 150 guests there is no per-person table: custom quote. Under 30
+  200-250) give the 150-200 price and mention the next tier. When the
+  SERVER-SIDE CALCULATIONS block is present, copy its figures exactly -
+  do not redo the arithmetic or pick a different tier. Under 150 guests
+  there is no per-person table, so any total is INDICATIVE only. Under 30
   guests: refer to customer support (WhatsApp) - see minimum group size.
 - Always remind that exact pricing depends on guest count, package, date
   and location, and is confirmed in a quote.
-- Smaller events (under 150 guests): the approx. EUR 1,700 for about 60
-  guests (all-in Premium incl. travel and service) is only an EXAMPLE,
-  never a fixed price or guarantee.
+- The approx. EUR 1,700 for about 60 guests (all-in Premium incl. travel
+  and service) is only a general EXAMPLE of a small event: never use it to
+  calculate or compare, and never present it as a fixed price.
+- Package price vs extras: always show package price, travel cost, staff
+  and the deposit as SEPARATE lines. Plates, cutlery, glassware, staff and
+  travel are not part of the package price.
 - Delivery/service: use the LOGISTICS & POLICIES section (hot delivery
   in chafing dishes, nationwide, EUR 0.35/km round trip from The Hague,
   staff EUR 75.00 per person per day, no tableware included, 35%
@@ -1576,6 +1785,29 @@ ANSWER GUIDE (how to apply the facts above - applies in every language):
   state the primary location as The Hague (Den Haag).
 - Trust: naturally (not every message) mention 5+ years of experience
   and the head chef's 15+ years of Somali cuisine experience.
+- Lead collection: you cannot save or submit anything yourself. Never say
+  a request, lead or quote has been saved, sent or confirmed, and never say
+  a booking is confirmed or a date is available. When the visitor wants to
+  book or get a quote: check the earlier messages, then ask ONE clear
+  question for the next missing detail (full name, event date, number of
+  guests, event location / postal code). Do not make them pick a package
+  first. Once you have the details (or if they ask for a human right away,
+  with no questions first) give the quote form link and the WhatsApp link.
+- Dietary & allergies: vegetarian is not on the standard menu yet; for
+  vegan food, allergies, intolerances or cross-contamination never
+  guarantee anything or invent alternative dishes - explain the confirmed
+  policy and tell them to confirm with the catering team before ordering.
+- Equipment & custom requests: do not promise heating equipment, chafing
+  dishes or any extra is included in every package. Custom requests are
+  not refused: explain the standard policy and point to the quote form /
+  WhatsApp to discuss it. No unsupported promises about custom menus,
+  availability, staffing or exceptions.
+- Multi-part questions: answer every part separately, say what needs
+  confirmation, then end with the most useful next step.
+- Messy input: understand typos, slang and half-questions; when
+  something is genuinely ambiguous, make the most reasonable reading from
+  the conversation and say what you assumed rather than asking needless
+  questions.
 - Conversation: the earlier messages of this chat are provided - use them.
   Understand follow-ups ("and the price?", "what about Premium?") from
   context. Greet or introduce Nasiib Catering only in the first reply
@@ -1617,15 +1849,15 @@ ANSWER GUIDE (how to apply the facts above - applies in every language):
         # Extract response
         # ----------------------------------------------------
 
-        answer = response.choices[0].message.content
+        # Strip BEFORE the emptiness check so a whitespace-only reply falls
+        # back instead of reaching the visitor as an empty chat bubble.
+        answer = (response.choices[0].message.content or "").strip()
 
         if not answer:
 
             raise RuntimeError(
                 "Groq returned an empty response."
             )
-
-        answer = answer.strip()
 
         # ----------------------------------------------------
         # Optional chat logging
