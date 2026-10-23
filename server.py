@@ -703,6 +703,40 @@ def build_whatsapp_url(order: dict) -> str:
 
     import urllib.parse
 
+    if order.get("request_type") == "quote":
+        # Quote request from the Location page: always sent to the business
+        # in Dutch, in a fixed layout (the owner reads it in WhatsApp).
+        def _v(key):
+            value = str(order.get(key) or "").strip()
+            return value if value else "-"
+
+        quote_lines = [
+            f"Nieuwe Aanvraag - {BUSINESS_NAME}",
+            "",
+            "Klantgegevens:",
+            f"• Naam: {_v('name')}",
+            f"• Telefoonnummer: {_v('phone')}",
+            f"• Adres / Locatie: {_v('address')}",
+            "",
+            "Details van de aanvraag:",
+            f"• Datum van event: {_v('event_date')}",
+            f"• Tijdstip: {_v('event_time')}",
+            f"• Aantal personen: {_v('guests')}",
+            f"• Gekozen pakket / Wensen: {_v('package')}",
+            "",
+            f"Opmerkingen / Dieetwensen: {_v('message')}",
+        ]
+
+        quote_text = urllib.parse.quote("\n".join(quote_lines))
+        quote_digits = "".join(
+            ch for ch in (WHATSAPP_NUMBER or "") if ch.isdigit()
+        )
+
+        if quote_digits:
+            return f"https://wa.me/{quote_digits}?text={quote_text}"
+
+        return f"https://api.whatsapp.com/send?text={quote_text}"
+
     lines = [
         f"Hi {BUSINESS_NAME}, I'd like to place an order:",
         f"Name: {order.get('name', '')}",
@@ -803,6 +837,18 @@ class OrderCreate(BaseModel):
     message: Optional[str] = None
 
     address: Optional[str] = None
+
+    # Quote request fields (Location page form). All optional so the
+    # regular order modal keeps working unchanged.
+    request_type: Optional[str] = Field(default=None, max_length=20)
+
+    event_date: Optional[str] = Field(default=None, max_length=50)
+
+    event_time: Optional[str] = Field(default=None, max_length=50)
+
+    guests: Optional[str] = Field(default=None, max_length=20)
+
+    package: Optional[str] = Field(default=None, max_length=500)
 
 
 class OrderStatusUpdate(BaseModel):
@@ -1603,6 +1649,11 @@ async def create_order(
         "items": order.items or [],
         "message": order.message,
         "address": order.address,
+        "request_type": order.request_type,
+        "event_date": order.event_date,
+        "event_time": order.event_time,
+        "guests": order.guests,
+        "package": order.package,
         "status": "new",
         "created_at": utc_now(),
         "updated_at": utc_now(),
