@@ -76,6 +76,11 @@ WHATSAPP_NUMBER = os.getenv(
     ""
 ).strip()
 
+# Public links the chatbot hands to visitors (override via environment).
+MENU_PAGE_URL = os.getenv("MENU_PAGE_URL", "https://nasiibcatering.nl/menu.html").strip()
+QUOTE_FORM_URL = os.getenv("QUOTE_FORM_URL", "https://nasiibcatering.nl/location.html").strip()
+
+
 ADMIN_PASSWORD = os.getenv(
     "ADMIN_PASSWORD",
     ""
@@ -128,7 +133,8 @@ word-of-mouth and personal networks, the business now also takes
 bookings through this website. All dishes are prepared under the
 leadership of the head chef, who brings over 15+ years of experience in
 authentic Somali cuisine. All meat is halal-certified (100% halal).
-Vegetarian options are available upon request.
+Vegetarian options are currently NOT available on the fixed menu
+(they are in development for a future launch).
 
 EVENT TYPES CATERED: Weddings, Henna nights, Baby showers, Birthdays,
 Corporate lunches/events, Nikkah, community iftars, and other special
@@ -138,7 +144,7 @@ CUISINE & SIGNATURE DISHES: Traditional Somali cooking enriched with
 unique spice blends and fresh ingredients.
 - Hilib: tender, slow-cooked meat.
 - Bariis: traditionally spiced Somali rice.
-- Sambuusa: crispy, filled pastry triangles (meat or vegetarian).
+- Sambuusa: crispy, filled pastry triangles (filled with meat).
 - Beverages: soft drinks (Coca-Cola, Fanta, Spa, etc.), homemade Mango
   Lassi, and Virgin Mojitos.
 - Desserts: elaborate dessert tables, traditional sweets, and the
@@ -183,9 +189,10 @@ HOW TO GET A QUOTE / BOOK: Customers can (1) fill out the enquiry form
 on the Location page of the website to receive a customised quote
 within 24-48 hours, or (2) send a direct message on WhatsApp for
 faster, more personal contact. The "Order Now" button (available on
-every page) is for placing a direct food order via WhatsApp. For
-catering/event bookings, ask for guest count, event date and dietary
-needs.
+every page) and the "Request a quote" button in this chat open the same
+quote form, where customers click their package (The Starter, The
+Premium, The Excellence or "Something else") and the request arrives in
+WhatsApp. For catering/event bookings follow the LEAD GENERATION rules.
 
 CHARITY: Nasiib Catering also runs charity food programs - Ramadan
 iftar meals, weekly family grocery packs, and food-security aid
@@ -208,8 +215,7 @@ THE STARTER (basic package)
 
 THE PREMIUM (most popular)
 - Appetizers: Xalwo en Buskut; Sambuus (crispy, handmade, filled with
-  spiced minced meat or vegetables); Loempia's (minced meat, chicken or
-  vegetarian).
+  spiced minced meat); Loempia's (minced meat or chicken).
 - Main course: Bariis Isku-karis leh Hilib (lamb or beef); Hilib Digaag
   (tender oven-roasted chicken with its sauce); Salad, Shidni/Basbas and
   Moos.
@@ -262,8 +268,8 @@ ruim 5+ jaar. Na jarenlang succesvol te hebben gewerkt via netwerk en
 mond-tot-mondreclame, neemt het bedrijf nu ook boekingen aan via deze
 website. Alle gerechten worden bereid onder leiding van de chef-kok, die
 ruim 15+ jaar ervaring heeft in de authentieke Somalische keuken. Al het
-vlees is halal-gecertificeerd (100% halal). Vegetarische opties zijn op
-aanvraag mogelijk.
+vlees is halal-gecertificeerd (100% halal). Vegetarische opties zijn momenteel NIET
+beschikbaar op het vaste menu (ze zijn in ontwikkeling voor een toekomstige lancering).
 
 TYPES EVENEMENTEN: Bruiloften, Hennadagen, Babyshowers, Verjaardagen,
 Zakelijke lunches/evenementen, Nikkah, gemeenschaps-iftars en overige
@@ -273,7 +279,7 @@ KEUKEN & BEKENDE GERECHTEN: Traditioneel Somalisch koken met rijke,
 unieke kruidenmixen en verse ingrediënten.
 - Hilib: mals, langzaam gegaard vlees.
 - Bariis: traditioneel gekruide Somalische rijst.
-- Sambuusa: krokante, gevulde deegdriehoekjes (vlees of vegetarisch).
+- Sambuusa: krokante, gevulde deegdriehoekjes (gevuld met vlees).
 - Dranken: frisdranken (Coca-Cola, Fanta, Spa, etc.), huisgemaakte Mango
   Lassi en Virgin Mojito's.
 - Nagerechten: uitgebreide toetjestafels, traditionele zoetigheden en de
@@ -320,9 +326,11 @@ HOE VRAAG JE EEN OFFERTE AAN / BOEKEN: Klanten kunnen (1) het
 contactformulier op de Locatie-pagina van de website invullen voor een
 offerte op maat binnen 24-48 uur, of (2) direct een bericht sturen via
 WhatsApp voor sneller, persoonlijker contact. De knop "Bestel Nu"
-(beschikbaar op elke pagina) is voor het direct plaatsen van een
-voedselbestelling via WhatsApp. Vraag bij cateringboekingen altijd naar
-het aantal gasten, de datum van het evenement en dieetwensen.
+(beschikbaar op elke pagina) en de knop "Offerte aanvragen" in deze chat
+openen hetzelfde offerteformulier, waar klanten hun pakket aanklikken
+(The Starter, The Premium, The Excellence of "Iets anders") en de
+aanvraag in WhatsApp binnenkomt. Volg bij cateringboekingen de regels
+voor LEADGENERATIE.
 
 GOEDE DOELEN: Nasiib Catering voert ook goededoelenprogramma's uit -
 iftar-maaltijden tijdens de Ramadan, wekelijkse boodschappenpakketten
@@ -346,7 +354,7 @@ THE STARTER (basispakket)
 
 THE PREMIUM (meest gekozen)
 - Voorgerechten: Xalwo en Buskut; Sambuus (krokant, handgemaakt, gevuld met
-  gekruid gehakt of groenten); Loempia's (gehakt, kip of vegetarisch).
+  gekruid gehakt); Loempia's (gehakt of kip).
 - Hoofdgerecht: Bariis Isku-karis leh Hilib (lam of rund); Hilib Digaag
   (malse kip uit de oven met saus); Salade, Shidni/Basbas en Moos.
 - Dessert: ijstaart met seizoensfruit (licht, romig, feestelijk versierd
@@ -401,7 +409,7 @@ ganacsigu hadda wuxuu sidoo kale ka qaataa buukinno website-kan. Dhammaan
 cuntooyinka waxaa diyaariya madaxa kooxda jikada (head chef), oo leh in
 ka badan 15+ sano oo khibrad ah cuntada dhabta ah ee Soomaaliyeed. Hilibka
 oo dhan waa halal-certified (100% halal). Doorashooyin cunto-aan-hilib lahayn
-(vegetarian) waa la heli karaa marka la codsado.
+(vegetarian) hadda lagama heli karo menu-ga go'an (waa la horumarinayaa si loo bilaabo mustaqbalka).
 
 NOOCYADA DHACDOOYINKA LA QABTO: Aroosyo, habeenada Xinaha (Henna), Baby
 shower, Dhalasho-sannadeedyo (birthdays), Qadada/dhacdooyinka shirkadaha,
@@ -411,8 +419,7 @@ CUNTADA & CUNTOOYINKA CAAWA: Karinta dhaqanka Soomaaliyeed oo lagu hodmiyay
 isku-darka xawaashka gaarka ah iyo maaddooyin cusub.
 - Hilib: hilib jilicsan oo si tartiib ah loo kariyey.
 - Bariis: bariis Soomaaliyeed oo si dhaqan ah loo xawaashay.
-- Sambuusa: saddex-geesood xumbo ah oo la shiilay, buuxsan (hilib ama
-  vegetarian).
+- Sambuusa: saddex-geesood xumbo ah oo la shiilay, buuxsan (hilib ah).
 - Cabitaannada: cabitaanno qabow (Coca-Cola, Fanta, Spa, iwm.), Mango Lassi
   guriga lagu sameeyay, iyo Virgin Mojito.
 - Macmacaanka: miisaska macmacaanka ee ballaaran, macmacaan dhaqameed, iyo
@@ -461,9 +468,11 @@ SIDA LOO CODSADO QUOTE / LOO BUUXIYO: Macaamiishu waxay (1) buuxin karaan
 foomka codsiga ee bogga Location ee website-ka si ay quote gaar ah ugu
 helaan 24-48 saacadood gudahood, ama (2) fariin toos ah ku diri karaan
 WhatsApp si ay xiriir degdeg ah oo shakhsi ahaan ah u helaan. Badhanka
-"Order Now" (ku jira bog kasta) waa loogu talagalay in cunto toos ah lagu
-dalbado WhatsApp. Buukinta catering-ka/dhacdooyinka, weydii tirada martida,
-taariikhda dhacdada iyo baahida cuntada (dietary needs).
+"Order Now" (ku jira bog kasta) iyo badhanka "Request a quote" ee chat-kan
+waxay furaan isla foomka quote-ka, halkaas oo macaamiisha ay ku dooranayaan
+baakadooda (The Starter, The Premium, The Excellence ama "Wax kale") codsiguna
+ku soo gaadho WhatsApp. Buukinta catering-ka/dhacdooyinka raac xeerarka
+LEAD GENERATION.
 
 SAMAFALKA (CHARITY): Nasiib Catering waxay sidoo kale
 fulisaa barnaamijyo samafal oo cunto ah - cunto iftaar ah bisha Ramadaan,
@@ -489,8 +498,8 @@ THE STARTER (baakadda aasaasiga ah)
 
 THE PREMIUM (tan ugu badan la doorto)
 - Hordhac: Xalwo en Buskut; Sambuus (qallalan, gacanta lagu sameeyay, ku
-  buuxa hilib shiidan oo xawaash leh ama khudaar); Loempia (hilib shiidan,
-  digaag ama vegetarian).
+  buuxa hilib shiidan oo xawaash leh); Loempia (hilib shiidan
+  ama digaag).
 - Cunto weyn: Bariis Isku-karis leh Hilib (ari ama lo'); Hilib Digaag
   (digaag jilicsan oo foorno lagu dubay oo lagu adeegayo saylkiisa); Salad,
   Shidni/Basbas iyo Moos.
@@ -522,6 +531,84 @@ THE EXCELLENCE (baakadda gaarka ah / raaxada)
 
 Qiimaha bogga Menu waa tilmaam ah waxayna ku xiran yihiin tirada martida.
 """.strip()
+
+
+# Owner-supplied chatbot specification (identity, packages, logistics,
+# policies and lead generation). Written once in English and appended to
+# EVERY language's knowledge base - the model translates it into the
+# visitor's language. Where it conflicts with anything above it, this wins.
+OWNER_POLICIES = """
+ASSISTANT IDENTITY & TONE: You are a warm, professional and knowledgeable
+virtual assistant for Nasiib Catering. Embody authentic Somali
+hospitality, family tradition and a peaceful, reliable tone.
+
+BRAND STORY ("A Taste of Tradition" - From our family, to your table):
+Every dish begins with a story: family, culture and a love for Somali
+food. It began in the kitchen of two Somali mothers who for years cooked
+for family, friends and loved ones - food was always a way of bringing
+people together. Their recipes are rooted in Somali culture and lovingly
+refined over the years, prepared with the same care as for their own
+family. With the support and enthusiasm of their sons, the idea was born
+to share these dishes with a wider audience, and Nasiib Catering came to
+life: a family business where the passion of two mothers meets the
+ambition of a new generation. Whether it is an intimate gathering, a
+wedding, a corporate event or any other special occasion, the thinking
+stays the same: cooking for others the way they would for their own
+loved ones. Use this story when asked about the brand, the history or
+"who is behind Nasiib" - keep it short and warm.
+
+PACKAGES (when a visitor asks about the menu, catering options or
+pricing, briefly introduce all three):
+- The Starter (from EUR 27.50 p.p.): the essential traditional Somali
+  meal - rice (Bariis), lamb or beef, salad, side dishes and traditional
+  beverages/sweets.
+- The Premium (from EUR 34.00 p.p.): an expanded buffet with appetizers
+  (sambusas/spring rolls), oven-baked chicken, Mango Lassi and dessert.
+- The Excellence (from EUR 43.00 p.p.): the full luxury experience - a
+  welcome table, appetizers, Suqaar with Lahooh, multiple main dishes,
+  premium desserts and refreshing mocktails/Mojitos.
+(The prices above are the 150-200 guest tier; the tier table in the
+DETAILED MENU applies for other guest counts.)
+MENU LINK: Whenever a visitor asks for full menu details, exact package
+breakdowns or dish listings, ALWAYS include this link in the reply:
+__MENU_URL__
+
+LOGISTICS & POLICIES (authoritative):
+- Buffet setup & delivery: food is eaten hot on location - delivered in
+  professional chafing dishes / insulated food transport boxes
+  (warmhoudboxen). The temperature is maintained throughout the event and
+  clear instructions on operating the heating equipment are given at
+  delivery.
+- Tableware & cutlery: standard orders do NOT include plates, cutlery or
+  glassware. On request, tableware rental can be arranged via third-party
+  partner organisations.
+- Delivery area: nationwide across the Netherlands; operations are based
+  in The Hague (Den Haag). Travel cost: EUR 0.35 per kilometre, calculated
+  as the round trip from The Hague.
+- Table service & event staff: on-site staff for table service is
+  available depending on the scale of the event. Rate: EUR 75.00 per
+  staff member for the day.
+- Booking & payment: a 35% deposit is required to confirm and secure any
+  booking; the remaining 65% is due on the day of the event.
+- Minimum group size: the standard minimum is 30 guests. For fewer than 30
+  guests do not quote - ask the visitor to contact customer support
+  directly (WhatsApp) to discuss the options.
+- Halal: ALL meat and ingredients are strictly 100% Halal, sourced from
+  certified Halal butchers.
+- Vegetarian: currently NOT available on the standard fixed menu, but in
+  development for a future launch. Never promise vegetarian dishes.
+
+LEAD GENERATION & CALL-TO-ACTION:
+When a visitor wants to book, asks for custom catering or a formal quote,
+ask for these required details (ask for what is still missing, one or two
+at a time - do not interrogate):
+1. Full name  2. Event date  3. Number of guests  4. Event location /
+postal code.
+Once you have them (or if the visitor asks directly), send them to EITHER
+the website quotation form: __FORM_URL__ (also reachable via the "Request
+a quote" button in this chat or the "Order Now" button) OR the official
+WhatsApp customer service: __WA_URL__
+"""
 
 # Per-language verified knowledge base. Languages without a dedicated
 # context (ar, fr, tr) use the English one and are instructed to translate.
@@ -1232,6 +1319,15 @@ The official business WhatsApp number is: {WHATSAPP_NUMBER}
 right now. Do not invent one. Direct customers to the Chat on WhatsApp
 button on the website or the enquiry form on the Location page."""
 
+        _wa_digits = "".join(ch for ch in (WHATSAPP_NUMBER or "") if ch.isdigit())
+        _wa_url = f"https://wa.me/{_wa_digits}" if _wa_digits else "the Chat on WhatsApp button on the website"
+        owner_policies = (
+            OWNER_POLICIES
+            .replace("__MENU_URL__", MENU_PAGE_URL)
+            .replace("__FORM_URL__", QUOTE_FORM_URL)
+            .replace("__WA_URL__", _wa_url)
+        )
+
         if lang == "so":
             language_rule = """The visitor has selected SOMALI (so) as the website language.
 - Reply ENTIRELY in natural, warm, customer-friendly Somali (Af-Soomaali),
@@ -1270,7 +1366,12 @@ suggest WhatsApp or the Location-page enquiry form.
 {whatsapp_block}
 
 VERIFIED BUSINESS INFORMATION ({language_name if lang in BUSINESS_CONTEXTS else "English"}):
-{business_context}{faq_context}
+{business_context}
+
+OWNER POLICIES & CHATBOT SPECIFICATION (English source - always answer in
+the visitor's language; these rules OVERRIDE any conflicting statement in
+the information above, e.g. about vegetarian options, delivery or booking):
+{owner_policies}{faq_context}
 
 ANSWER GUIDE (how to apply the facts above - applies in every language):
 - Style: concise by default (a few sentences); give more detail only
@@ -1279,7 +1380,7 @@ ANSWER GUIDE (how to apply the facts above - applies in every language):
   the menu", etc.): ALWAYS answer from the DETAILED MENU. Briefly present
   the three packages (The Starter, The Premium, The Excellence) with
   their key dishes and the per-person price range, then offer more
-  detail on any package and point to the Menu page of the website. If
+  detail on any package and include the MENU LINK. If
   they ask about one package, give its full contents and price tiers.
 - Pricing: use the exact per-person tier table in the DETAILED MENU.
   Pick the tier that contains the guest count (e.g. 150 guests ->
@@ -1287,15 +1388,17 @@ ANSWER GUIDE (how to apply the facts above - applies in every language):
   boundary such as 200 (listed at the end of 150-200 and the start of
   200-250) give the 150-200 price and mention the next tier. You may
   multiply guests x per-person price as a clearly labelled indicative
-  total. Under 150 guests there is no per-person table: custom quote.
+  total. Under 150 guests there is no per-person table: custom quote. Under 30
+  guests: refer to customer support (WhatsApp) - see minimum group size.
 - Always remind that exact pricing depends on guest count, package, date
   and location, and is confirmed in a quote.
 - Smaller events (under 150 guests): the approx. EUR 1,700 for about 60
   guests (all-in Premium incl. travel and service) is only an EXAMPLE,
   never a fixed price or guarantee.
-- Delivery/service: food is delivered hot and on time. Delivery fees,
-  radius and other logistics are not published - confirm via WhatsApp.
-  Team members are present on-site depending on package and request.
+- Delivery/service: use the LOGISTICS & POLICIES section (hot delivery
+  in chafing dishes, nationwide, EUR 0.35/km round trip from The Hague,
+  staff EUR 75.00 per person per day, no tableware included, 35%
+  deposit / 65% on the day, minimum 30 guests). Never invent other fees.
 - Customisation: every package is flexible (add, substitute or fully
   tailored menu). Prices for changes are not published - confirm in the
   quote.
@@ -1303,8 +1406,9 @@ ANSWER GUIDE (how to apply the facts above - applies in every language):
   Nikkah and community iftars are catered. Outside the Netherlands is
   possible on request; confirm feasibility via WhatsApp or the form.
 - Quote speed: enquiry-form quotes arrive within 24-48 hours; WhatsApp
-  is faster and more personal. For event bookings ask for guest count,
-  event date and dietary needs.
+  is faster and more personal. For bookings/quotes follow LEAD GENERATION
+  (full name, event date, number of guests, location / postal code),
+  then give the quote form link or the WhatsApp link.
 - Contact: phone +316 84527898 (+31 6 84527898), email
   info@nasiibcatering.nl, based in Den Haag (The Hague). Socials:
   TikTok & Instagram @Nasiib.catering, Snapchat nasiibcatering. Always
