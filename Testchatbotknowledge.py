@@ -310,3 +310,21 @@ def test_whatsapp_url_rejects_non_http_override(monkeypatch):
 def test_no_whatsapp_configured_never_invents_a_number(monkeypatch):
     monkeypatch.setattr(server, "WHATSAPP_NUMBER", "")
     assert server.get_whatsapp_url() == ""
+
+
+# ----------------------------------------------------------------------
+# 6. Brand-story ("about") questions in degraded mode
+# ----------------------------------------------------------------------
+@pytest.mark.parametrize("lang,q", [
+    ("en", "tell me your story"), ("en", "Who are you?"), ("nl", "wie zijn jullie"),
+    ("so", "sheeko"), ("fr", "qui \u00eates-vous"), ("tr", "kimsiniz"), ("ar", "\u0645\u0646 \u0627\u0646\u062a\u0645"),
+])
+def test_fallback_about_answers_in_every_language(lang, q):
+    out = fb(q, lang)
+    assert "Nasiib" in out or "\u0646\u0635\u064a\u0628" in out
+    assert "wa.me" not in out  # a story answer, not the generic contact reply
+
+
+def test_fallback_about_does_not_hijack_menu_questions():
+    assert "27.50" in fb("tell me about your menu")
+    assert "34.00" in fb("about the premium")
