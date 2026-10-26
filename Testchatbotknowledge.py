@@ -328,3 +328,56 @@ def test_fallback_about_answers_in_every_language(lang, q):
 def test_fallback_about_does_not_hijack_menu_questions():
     assert "27.50" in fb("tell me about your menu")
     assert "34.00" in fb("about the premium")
+
+
+# ----------------------------------------------------------------------
+# 7. Pleasantries must not trigger the generic "I can help with..." reply
+# ----------------------------------------------------------------------
+@pytest.mark.parametrize("lang,q", [
+    ("en", "Thank you"), ("en", "wow great"), ("en", "thanks!"), ("en", "perfect"),
+    ("nl", "bedankt"), ("so", "mahadsanid"), ("fr", "merci"), ("tr", "te\u015fekk\u00fcrler"), ("ar", "\u0634\u0643\u0631\u0627"),
+])
+def test_thanks_and_praise_get_a_warm_short_reply(lang, q):
+    out = fb(q, lang)
+    assert out == server._LC[lang]["thanks"]
+    assert "wa.me" not in out
+
+
+@pytest.mark.parametrize("lang,q", [("en", "bye"), ("nl", "doei"), ("fr", "au revoir")])
+def test_goodbye(lang, q):
+    out = fb(q, lang)
+    assert "wa.me" not in out and "Nasiib" in out or lang == "fr"
+
+
+def test_pleasantry_plus_real_question_still_answers_the_question():
+    assert "34.00" in fb("thanks, how much is premium?")
+    assert "100% Halal" in fb("great, is it halal?")
+    assert "30 guests" in fb("ok I want to book for 20 people")
+
+
+def test_ai_prompt_has_pleasantries_rule():
+    post("thank you")
+    assert "Pleasantries" in system_prompt()
+
+
+# ----------------------------------------------------------------------
+# 8. Buffet setup questions in degraded mode
+# ----------------------------------------------------------------------
+@pytest.mark.parametrize("lang,q", [
+    ("en", "is buffet setup available"), ("nl", "is buffet opzet mogelijk"), ("so", "habaynta buffet"),
+    ("fr", "installation du buffet ?"), ("tr", "b\u00fcfe kurulum var m\u0131"), ("ar", "\u0647\u0644 \u0627\u0644\u062a\u062c\u0647\u064a\u0632 \u0645\u062a\u0648\u0641\u0631 \u0628\u0648\u0641\u064a\u0647"),
+])
+def test_fallback_buffet_setup_answers_in_every_language(lang, q):
+    out = fb(q, lang)
+    assert out != server._LC[lang]["default"].format(wa=server.get_whatsapp_url(), form=server.QUOTE_FORM_URL)
+    assert "75" in out and "{" not in out and server.QUOTE_FORM_URL in out
+
+
+def test_fallback_buffet_does_not_overpromise():
+    out = fb("is buffet setup available")
+    assert "optionally" in out and "confirmed in your quote" in out
+    assert "included in every" not in out.lower()
+
+
+def test_delivery_question_still_gets_delivery_answer():
+    assert "0.35" in fb("how do you deliver?")
