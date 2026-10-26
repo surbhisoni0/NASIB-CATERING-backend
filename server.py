@@ -1345,6 +1345,7 @@ _LC = {
         "minimum": "Our standard minimum is 30 guests. For fewer than 30 guests, please contact customer support directly to discuss the options: {wa}",
         "book": "Lovely! To prepare your quote I need: your full name, the event date, the number of guests and the event location / postal code.",
         "links": "You can send your request with the quote form ({form}) or message us on WhatsApp: {wa}",
+        "about": "Nasiib Catering is a family-owned Somali catering business in the Netherlands. It began in the kitchen of two Somali mothers who cooked for family and friends for years; with the support of their sons they now share those recipes at weddings, corporate events and other special occasions, cooking for others the way they would for their own family. From our family, to your table.",
         "default": "I can help with our menu, packages, delivery, halal food, payment terms and quotes. For anything else, message us on WhatsApp: {wa}",
     },
     "nl": {
@@ -1367,6 +1368,7 @@ _LC = {
         "minimum": "Ons standaard minimum is 30 gasten. Voor minder dan 30 gasten neem je het beste direct contact op met de klantenservice: {wa}",
         "book": "Fijn! Voor je offerte heb ik nodig: je volledige naam, de datum van het evenement, het aantal gasten en de locatie / postcode.",
         "links": "Je kunt je aanvraag versturen via het offerteformulier ({form}) of ons appen via WhatsApp: {wa}",
+        "about": "Nasiib Catering is een Somalisch familiebedrijf in Nederland. Het begon in de keuken van twee Somalische moeders die jarenlang kookten voor familie en vrienden; met steun van hun zonen delen ze die recepten nu op bruiloften, zakelijke evenementen en andere bijzondere gelegenheden, en koken ze voor anderen zoals ze voor hun eigen familie zouden doen. Van onze familie, naar jouw tafel.",
         "default": "Ik help je graag met ons menu, pakketten, bezorging, halal eten, betalingsvoorwaarden en offertes. Voor iets anders kun je ons appen via WhatsApp: {wa}",
     },
     "so": {
@@ -1389,6 +1391,7 @@ _LC = {
         "minimum": "Ugu yaraan caadiga ah waa 30 marti. Haddii ay ka yar tahay 30 marti, fadlan toos ula xiriir adeegga macaamiisha: {wa}",
         "book": "Fiican! Si aan quote kuu diyaariyo waxaan u baahanahay: magacaaga oo dhan, taariikhda dhacdada, tirada martida iyo goobta dhacdada / koodhka boostada.",
         "links": "Codsigaaga ku dir foomka quote-ka ({form}) ama nagu soo qor WhatsApp: {wa}",
+        "about": "Nasiib Catering waa ganacsi qoys Soomaaliyeed oo ku yaal Nederland. Waxay ka bilaabatay jikada laba hooyo oo Soomaali ah oo sannado badan u karin jiray qoyskooda iyo asxaabtooda; iyadoo la kaashanayo wiilashooda, hadda waxay cuntadaas ku wadaagaan arooska, munaasabadaha shirkadaha iyo xaflado kale, iyagoo u karinaya dadka sidii qoyskooda. Qoyskayaga ilaa miiskaaga.",
         "default": "Waan kaa caawin karaa menu-ga, baakadaha, keenista, cuntada halal, shuruucda lacag-bixinta iyo quote. Wax kale nagu soo qor WhatsApp: {wa}",
     },
     "ar": {
@@ -1411,6 +1414,7 @@ _LC = {
         "minimum": "الحد الأدنى القياسي هو 30 ضيفاً. لأقل من 30 ضيفاً يرجى التواصل مباشرة مع خدمة العملاء لمناقشة الخيارات: {wa}",
         "book": "رائع! لتحضير عرض السعر أحتاج إلى: اسمك الكامل، تاريخ المناسبة، عدد الضيوف، وموقع المناسبة / الرمز البريدي.",
         "links": "يمكنك إرسال طلبك عبر نموذج عرض السعر ({form}) أو مراسلتنا على واتساب: {wa}",
+        "about": "نصيب كاترينغ مشروع عائلي صومالي في هولندا. بدأ في مطبخ أمّين صوماليتين طهتا لسنوات للعائلة والأصدقاء، وبدعم من أبنائهما تشاركان اليوم هذه الوصفات في حفلات الزفاف وفعاليات الشركات والمناسبات الخاصة، وتطهوان للآخرين كما لو كانوا من أهلهما. من عائلتنا إلى مائدتكم.",
         "default": "يسعدني مساعدتك في القائمة والباقات والتوصيل والطعام الحلال وشروط الدفع وعروض الأسعار. لأي أمر آخر راسلنا على واتساب: {wa}",
     },
     "fr": {
@@ -1433,6 +1437,7 @@ _LC = {
         "minimum": "Notre minimum standard est de 30 invités. Pour moins de 30 invités, contactez directement le service client : {wa}",
         "book": "Avec plaisir ! Pour préparer votre devis, j'ai besoin de : votre nom complet, la date de l'événement, le nombre d'invités et le lieu / code postal.",
         "links": "Vous pouvez envoyer votre demande via le formulaire de devis ({form}) ou nous écrire sur WhatsApp : {wa}",
+        "about": "Nasiib Catering est une entreprise familiale somalienne aux Pays-Bas. Tout a commencé dans la cuisine de deux mères somaliennes qui ont cuisiné pendant des années pour leurs proches ; avec le soutien de leurs fils, elles partagent aujourd'hui ces recettes lors de mariages, d'événements d'entreprise et d'autres occasions spéciales, en cuisinant pour les autres comme pour leur propre famille. De notre famille, à votre table.",
         "default": "Je peux vous aider pour le menu, les formules, la livraison, le halal, les conditions de paiement et les devis. Pour toute autre question, écrivez-nous sur WhatsApp : {wa}",
     },
     "tr": {
@@ -1455,6 +1460,7 @@ _LC = {
         "minimum": "Standart minimum 30 misafirdir. 30 kişiden az için lütfen doğrudan müşteri hizmetleriyle iletişime geçin: {wa}",
         "book": "Harika! Teklifinizi hazırlamak için şunlara ihtiyacım var: tam adınız, etkinlik tarihi, misafir sayısı ve etkinlik konumu / posta kodu.",
         "links": "Talebinizi teklif formundan ({form}) gönderebilir veya WhatsApp'tan yazabilirsiniz: {wa}",
+        "about": "Nasiib Catering, Hollanda'da aile işletmesi olan bir Somali catering firmasıdır. İki Somalili annenin mutfağında başladı; yıllarca aileleri ve dostları için yemek pişirdiler. Oğullarının desteğiyle bugün bu tarifleri düğünlerde, kurumsal etkinliklerde ve özel günlerde paylaşıyorlar; başkaları için de kendi ailelerine pişirir gibi pişiriyorlar. Ailemizden sofranıza.",
         "default": "Menü, paketler, teslimat, helal yemek, ödeme koşulları ve teklifler konusunda yardımcı olabilirim. Başka konular için WhatsApp'tan yazın: {wa}",
     },
 }
@@ -1473,6 +1479,7 @@ _KW = {
     "payment": ("deposit", "aanbetaling", "betaling", "betalen", "payment", "pay ", "acompte", "paiement", "kapora", "ödeme", "lacag", "kafaala", "دفع", "دفعة", "مقدم"),
     "minimum": ("minimum", "minimaal", "minimal", "at least", "ugu yaraan", "minimum de", "en az", "الحد الأدنى", "الحد الادنى"),
     "halal": ("halal", "xalaal", "حلال", "helal"),
+    "about": ("your story", "our story", "brand story", "who are you", "about yourself", "about nasiib", "about us", "what is nasiib", "who is nasiib", "your family", "wie zijn jullie", "over jullie", "over nasiib", "jullie verhaal", "wie is nasiib", "sheeko", "yaad tihiin", "waa maxay nasiib", "qui êtes", "qui etes", "votre histoire", "qui est nasiib", "kimsiniz", "hikaye", "nasiib nedir", "من انتم", "من أنتم", "قصتكم", "عنكم"),
     "veg": ("vegetar", "veggie", "vegan", "végétar", "vejetaryen", "نباتي", "khudaar"),
     "hours": ("hours", "opening", "open", "openingstijd", "geopend", "tijd", "horaire", "ouvert", "açık", "saat", "waqti", "furan", "ساعات", "مفتوح"),
     "book": ("book", "boek", "quote", "offerte", "devis", "teklif", "reserv", "codso", "buuk", "عرض سعر", "حجز", "réserv", "rezerv"),
@@ -1525,6 +1532,10 @@ def local_chat_fallback(user_message: str, lang: str = "en", history: Optional[L
             prev = [k for k in ("starter", "premium", "excellence") if _has(earlier, k)]
             if prev:
                 return package_block(prev[-1]) + "\n\n" + t["menu_link"].format(url=MENU_PAGE_URL)
+
+    # Brand story / "who are you" questions.
+    if _has(message, "about"):
+        return t["about"]
 
     def booking_reply() -> str:
         reply = t["book"]
