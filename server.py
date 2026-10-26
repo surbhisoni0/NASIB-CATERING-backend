@@ -1346,6 +1346,9 @@ _LC = {
         "book": "Lovely! To prepare your quote I need: your full name, the event date, the number of guests and the event location / postal code.",
         "links": "You can send your request with the quote form ({form}) or message us on WhatsApp: {wa}",
         "about": "Nasiib Catering is a family-owned Somali catering business in the Netherlands. It began in the kitchen of two Somali mothers who cooked for family and friends for years; with the support of their sons they now share those recipes at weddings, corporate events and other special occasions, cooking for others the way they would for their own family. From our family, to your table.",
+        "thanks": "You're very welcome! If you have any other questions about our menu, packages or a quote, just ask - we're happy to help. From our family, to your table.",
+        "bye": "Thank you for visiting Nasiib Catering! Whenever you're ready for a quote, we're here. Have a lovely day!",
+        "buffet": "Yes. Your food arrives hot on location in professional chafing dishes or insulated transport boxes, with clear instructions for the heating equipment. Full setup at the venue (and table decoration) can optionally be arranged, and on-site staff for table service are EUR 75.00 per staff member for the day. The exact setup and its cost are confirmed in your quote - request one here: {form} or message us on WhatsApp: {wa}",
         "default": "I can help with our menu, packages, delivery, halal food, payment terms and quotes. For anything else, message us on WhatsApp: {wa}",
     },
     "nl": {
@@ -1369,6 +1372,9 @@ _LC = {
         "book": "Fijn! Voor je offerte heb ik nodig: je volledige naam, de datum van het evenement, het aantal gasten en de locatie / postcode.",
         "links": "Je kunt je aanvraag versturen via het offerteformulier ({form}) of ons appen via WhatsApp: {wa}",
         "about": "Nasiib Catering is een Somalisch familiebedrijf in Nederland. Het begon in de keuken van twee Somalische moeders die jarenlang kookten voor familie en vrienden; met steun van hun zonen delen ze die recepten nu op bruiloften, zakelijke evenementen en andere bijzondere gelegenheden, en koken ze voor anderen zoals ze voor hun eigen familie zouden doen. Van onze familie, naar jouw tafel.",
+        "thanks": "Graag gedaan! Heb je nog vragen over ons menu, de pakketten of een offerte? Vraag het gerust - we helpen je graag. Van onze familie, naar jouw tafel.",
+        "bye": "Bedankt voor je bezoek aan Nasiib Catering! Wil je een offerte, dan zijn we er. Fijne dag!",
+        "buffet": "Ja. Het eten komt warm op locatie aan in professionele chafing dishes of warmhoudboxen, met duidelijke uitleg over de verwarmingsapparatuur. Complete opzet op locatie (en tafeldecoratie) kan optioneel geregeld worden, en bedienend personeel kost EUR 75,00 per medewerker per dag. De exacte opzet en kosten worden in je offerte bevestigd - vraag die aan via: {form} of app ons via WhatsApp: {wa}",
         "default": "Ik help je graag met ons menu, pakketten, bezorging, halal eten, betalingsvoorwaarden en offertes. Voor iets anders kun je ons appen via WhatsApp: {wa}",
     },
     "so": {
@@ -1392,6 +1398,9 @@ _LC = {
         "book": "Fiican! Si aan quote kuu diyaariyo waxaan u baahanahay: magacaaga oo dhan, taariikhda dhacdada, tirada martida iyo goobta dhacdada / koodhka boostada.",
         "links": "Codsigaaga ku dir foomka quote-ka ({form}) ama nagu soo qor WhatsApp: {wa}",
         "about": "Nasiib Catering waa ganacsi qoys Soomaaliyeed oo ku yaal Nederland. Waxay ka bilaabatay jikada laba hooyo oo Soomaali ah oo sannado badan u karin jiray qoyskooda iyo asxaabtooda; iyadoo la kaashanayo wiilashooda, hadda waxay cuntadaas ku wadaagaan arooska, munaasabadaha shirkadaha iyo xaflado kale, iyagoo u karinaya dadka sidii qoyskooda. Qoyskayaga ilaa miiskaaga.",
+        "thanks": "Adigaa mudan! Haddii aad wax kale ka weydiisanayso menu-ga, baakadaha ama quote, nala soo wadaag - waan ku caawinaynaa. Qoyskayaga ilaa miiskaaga.",
+        "bye": "Mahadsanid booqashada Nasiib Catering! Marka aad quote rabto, waan diyaar nahay. Maalin wanaagsan!",
+        "buffet": "Haa. Cuntadu way yimaadaa kulul goobta, waxaana lagu keenaa chafing dishes xirfadle ah ama sanduuqyo kuleylka haya, iyadoo la sharaxayo sida loo isticmaalo qalabka kululeeya. Habaynta buuxda ee goobta (iyo qurxinta miiska) waa la diyaarin karaa, shaqaaluhu waxay ku kacaysaa EUR 75.00 qof kasta maalintii. Habaynta saxda ah iyo qiimaha waa lagu xaqiijinayaa quote-ka - ka codso halkan: {form} ama nagu soo qor WhatsApp: {wa}",
         "default": "Waan kaa caawin karaa menu-ga, baakadaha, keenista, cuntada halal, shuruucda lacag-bixinta iyo quote. Wax kale nagu soo qor WhatsApp: {wa}",
     },
     "ar": {
@@ -1415,6 +1424,9 @@ _LC = {
         "book": "رائع! لتحضير عرض السعر أحتاج إلى: اسمك الكامل، تاريخ المناسبة، عدد الضيوف، وموقع المناسبة / الرمز البريدي.",
         "links": "يمكنك إرسال طلبك عبر نموذج عرض السعر ({form}) أو مراسلتنا على واتساب: {wa}",
         "about": "نصيب كاترينغ مشروع عائلي صومالي في هولندا. بدأ في مطبخ أمّين صوماليتين طهتا لسنوات للعائلة والأصدقاء، وبدعم من أبنائهما تشاركان اليوم هذه الوصفات في حفلات الزفاف وفعاليات الشركات والمناسبات الخاصة، وتطهوان للآخرين كما لو كانوا من أهلهما. من عائلتنا إلى مائدتكم.",
+        "thanks": "عفواً، يسعدنا ذلك! إذا كان لديك أي سؤال آخر عن القائمة أو الباقات أو عرض السعر فتفضّل بالسؤال. من عائلتنا إلى مائدتكم.",
+        "bye": "شكراً لزيارتك نصيب كاترينغ! نحن هنا متى احتجت إلى عرض سعر. يوماً سعيداً!",
+        "buffet": "نعم. يصل الطعام ساخناً إلى الموقع في أوعية تسخين (chafing dishes) احترافية أو صناديق نقل معزولة مع تعليمات واضحة لتشغيل معدات التسخين. يمكن ترتيب التجهيز الكامل في المكان (وتزيين الطاولات) عند الطلب، وتبلغ تكلفة طاقم الخدمة 75.00 يورو للفرد في اليوم. تُؤكَّد تفاصيل التجهيز وتكلفته في عرض السعر - اطلبه من هنا: {form} أو راسلنا على واتساب: {wa}",
         "default": "يسعدني مساعدتك في القائمة والباقات والتوصيل والطعام الحلال وشروط الدفع وعروض الأسعار. لأي أمر آخر راسلنا على واتساب: {wa}",
     },
     "fr": {
@@ -1438,6 +1450,9 @@ _LC = {
         "book": "Avec plaisir ! Pour préparer votre devis, j'ai besoin de : votre nom complet, la date de l'événement, le nombre d'invités et le lieu / code postal.",
         "links": "Vous pouvez envoyer votre demande via le formulaire de devis ({form}) ou nous écrire sur WhatsApp : {wa}",
         "about": "Nasiib Catering est une entreprise familiale somalienne aux Pays-Bas. Tout a commencé dans la cuisine de deux mères somaliennes qui ont cuisiné pendant des années pour leurs proches ; avec le soutien de leurs fils, elles partagent aujourd'hui ces recettes lors de mariages, d'événements d'entreprise et d'autres occasions spéciales, en cuisinant pour les autres comme pour leur propre famille. De notre famille, à votre table.",
+        "thanks": "Avec grand plaisir ! Si vous avez d'autres questions sur le menu, les formules ou un devis, n'hésitez pas. De notre famille, à votre table.",
+        "bye": "Merci de votre visite chez Nasiib Catering ! Nous sommes là dès que vous souhaitez un devis. Belle journée !",
+        "buffet": "Oui. Les plats arrivent chauds sur place dans des chafing dishes professionnels ou des caisses de transport isothermes, avec des instructions claires pour le matériel de chauffe. L'installation complète sur place (et la décoration de table) peut être organisée sur demande, et le personnel de service coûte 75,00 EUR par personne et par jour. Les détails et le coût sont confirmés dans votre devis - demandez-le ici : {form} ou écrivez-nous sur WhatsApp : {wa}",
         "default": "Je peux vous aider pour le menu, les formules, la livraison, le halal, les conditions de paiement et les devis. Pour toute autre question, écrivez-nous sur WhatsApp : {wa}",
     },
     "tr": {
@@ -1461,6 +1476,9 @@ _LC = {
         "book": "Harika! Teklifinizi hazırlamak için şunlara ihtiyacım var: tam adınız, etkinlik tarihi, misafir sayısı ve etkinlik konumu / posta kodu.",
         "links": "Talebinizi teklif formundan ({form}) gönderebilir veya WhatsApp'tan yazabilirsiniz: {wa}",
         "about": "Nasiib Catering, Hollanda'da aile işletmesi olan bir Somali catering firmasıdır. İki Somalili annenin mutfağında başladı; yıllarca aileleri ve dostları için yemek pişirdiler. Oğullarının desteğiyle bugün bu tarifleri düğünlerde, kurumsal etkinliklerde ve özel günlerde paylaşıyorlar; başkaları için de kendi ailelerine pişirir gibi pişiriyorlar. Ailemizden sofranıza.",
+        "thanks": "Rica ederiz! Menü, paketler veya teklif hakkında başka sorunuz olursa çekinmeden sorun. Ailemizden sofranıza.",
+        "bye": "Nasiib Catering'i ziyaret ettiğiniz için teşekkürler! Teklif almak istediğinizde buradayız. İyi günler!",
+        "buffet": "Evet. Yemekler profesyonel chafing dish'ler veya yalıtımlı taşıma kutuları içinde sıcak olarak gelir ve ısıtma ekipmanı için net talimatlar verilir. Mekânda tam kurulum (ve masa dekorasyonu) isteğe bağlı ayarlanabilir; servis personeli kişi başı gün için 75,00 EUR'dur. Kurulumun ayrıntıları ve maliyeti teklifte netleşir - buradan talep edin: {form} veya WhatsApp'tan yazın: {wa}",
         "default": "Menü, paketler, teslimat, helal yemek, ödeme koşulları ve teklifler konusunda yardımcı olabilirim. Başka konular için WhatsApp'tan yazın: {wa}",
     },
 }
@@ -1479,6 +1497,9 @@ _KW = {
     "payment": ("deposit", "aanbetaling", "betaling", "betalen", "payment", "pay ", "acompte", "paiement", "kapora", "ödeme", "lacag", "kafaala", "دفع", "دفعة", "مقدم"),
     "minimum": ("minimum", "minimaal", "minimal", "at least", "ugu yaraan", "minimum de", "en az", "الحد الأدنى", "الحد الادنى"),
     "halal": ("halal", "xalaal", "حلال", "helal"),
+    "buffet": ("buffet", "setup", "set up", "set-up", "chafing", "warmhoud", "heating", "opzet", "opstelling", "opbouw", "mise en place", "installation", "kurulum", "بوفيه", "تجهيز", "habayn", "hagaajin", "bufe"),
+    "thanks": ("thank", "thanks", "thankyou", "thx", "ty", "great", "wow", "awesome", "perfect", "nice", "cool", "good", "super", "lovely", "amazing", "ok", "okay", "alright", "bedankt", "dank", "dankje", "dankjewel", "geweldig", "top", "prima", "mooi", "fijn", "mahadsanid", "mahadsan", "fiican", "wacan", "mashallah", "shukran", "شكرا", "شكراً", "ممتاز", "رائع", "جميل", "تمام", "ماشاءالله", "merci", "génial", "genial", "parfait", "super", "harika", "mükemmel", "teşekkürler", "tesekkurler", "teşekkür", "sağol", "eyvallah", "tamam"),
+    "bye": ("bye", "goodbye", "cya", "tot", "doei", "dag", "nabad", "bajaj", "aurevoir", "adieu", "salut", "güle", "hoşça", "مع", "وداعا", "وداعاً"),
     "about": ("your story", "our story", "brand story", "who are you", "about yourself", "about nasiib", "about us", "what is nasiib", "who is nasiib", "your family", "wie zijn jullie", "over jullie", "over nasiib", "jullie verhaal", "wie is nasiib", "sheeko", "yaad tihiin", "waa maxay nasiib", "qui êtes", "qui etes", "votre histoire", "qui est nasiib", "kimsiniz", "hikaye", "nasiib nedir", "من انتم", "من أنتم", "قصتكم", "عنكم"),
     "veg": ("vegetar", "veggie", "vegan", "végétar", "vejetaryen", "نباتي", "khudaar"),
     "hours": ("hours", "opening", "open", "openingstijd", "geopend", "tijd", "horaire", "ouvert", "açık", "saat", "waqti", "furan", "ساعات", "مفتوح"),
@@ -1556,6 +1577,8 @@ def local_chat_fallback(user_message: str, lang: str = "en", history: Optional[L
         return t["payment"].format(**fmt)
     if _has(message, "minimum"):
         return t["minimum"].format(**fmt)
+    if _has(message, "buffet"):
+        return t["buffet"].format(**fmt)
     if _has(message, "delivery"):
         return t["delivery"]
 
@@ -1571,6 +1594,14 @@ def local_chat_fallback(user_message: str, lang: str = "en", history: Optional[L
 
     if _has(message, "event"):
         return booking_reply()
+
+    # Pleasantries ("thank you", "wow great", "ok", "bye"): reached only when
+    # no business topic was found above, so "thanks, what is the price?"
+    # still gets the price answer.
+    if _has_word(message, "bye") and len(message.split()) <= 4:
+        return t["bye"]
+    if _has_word(message, "thanks") and len(message.split()) <= 6:
+        return t["thanks"]
 
     return t["default"].format(**fmt)
 
@@ -1815,6 +1846,10 @@ ANSWER GUIDE (how to apply the facts above - applies in every language):
   availability, staffing or exceptions.
 - Multi-part questions: answer every part separately, say what needs
   confirmation, then end with the most useful next step.
+- Pleasantries: if the visitor only says thanks, praises, says ok or
+  goodbye, reply with one short, warm sentence (e.g. you're welcome,
+  happy to help, offer further help). Do NOT repeat a list of topics, the
+  contact links or any earlier answer.
 - Messy input: understand typos, slang and half-questions; when
   something is genuinely ambiguous, make the most reasonable reading from
   the conversation and say what you assumed rather than asking needless
